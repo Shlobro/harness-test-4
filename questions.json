@@ -1,0 +1,94 @@
+{
+  "questions": [
+    {
+      "question": "What is the target platform and preferred technology for this FPS?",
+      "options": [
+        "Web Browser (JavaScript/Three.js)",
+        "Desktop (Python/Ursina or Pygame)",
+        "Desktop (Unity or Godot)",
+        "Mobile (Android/iOS)"
+      ]
+    },
+    {
+      "question": "What visual style do you envision for the game?",
+      "options": [
+        "Simple geometric primitives (cubes/spheres) for a prototype look",
+        "Retro 90s FPS (Doom-style sprites)",
+        "Low-poly 3D (Minecraft/Roblox style)",
+        "High-fidelity realistic graphics"
+      ]
+    },
+    {
+      "question": "How should the 'Press B' weapon interaction function?",
+      "options": [
+        "Opens a pause menu/shop UI to select and buy weapons",
+        "Immediately buys/equips the next tier weapon if affordable",
+        "Opens a real-time inventory wheel",
+        "Only switches between already owned weapons"
+      ]
+    },
+    {
+      "question": "How do the AI bots behave?",
+      "options": [
+        "Melee rushers (Zombie style) that run straight at the player",
+        "Ranged attackers that stand still and shoot",
+        "Tactical AI that takes cover and flanks",
+        "Random wandering until line-of-sight is established"
+      ]
+    },
+    {
+      "question": "What is the specific nature of the 'game crash' caused by the RPG?",
+      "options": [
+        "The application intentionally forces a hard exit/close to desktop",
+        "A fake 'Blue Screen of Death' or error message appears",
+        "The game freezes and audio glitches, requiring a manual restart",
+        "The physics engine bugs out, sending everything flying, but game remains open"
+      ]
+    },
+    {
+      "question": "What is the progression of weapons before the final RPG?",
+      "options": [
+        "Pistol -> Shotgun -> Assault Rifle -> RPG",
+        "Knife -> Pistol -> Machine Gun -> RPG",
+        "Pistol -> Sniper Rifle -> Minigun -> RPG",
+        "Single-shot Rifle -> Double-barrel Shotgun -> Laser Gun -> RPG"
+      ]
+    },
+    {
+      "question": "How does the economy/money system work?",
+      "options": [
+        "Fixed amount per kill (e.g., $50)",
+        "Variable amount based on enemy type",
+        "Money drops as physical items to collect",
+        "Score points that convert to currency between waves"
+      ]
+    },
+    {
+      "question": "What does the game environment look like?",
+      "options": [
+        "A simple, flat enclosed arena",
+        "A multi-room indoor facility",
+        "An outdoor terrain with hills and obstacles",
+        "Procedurally generated maze"
+      ]
+    },
+    {
+      "question": "What constitutes a 'Game Over' or loss?",
+      "options": [
+        "Player health reaches zero",
+        "Enemies capture a specific point",
+        "Time runs out",
+        "There is no losing, only the RPG ending"
+      ]
+    },
+    {
+      "question": "Does the game have HUD elements?",
+      "options": [
+        "Minimal (Just crosshair)",
+        "Standard (Health bar, Ammo count, Money display)",
+        "Diegetic (Information displayed on weapon/watch)",
+        "Arcade style (Score popups, large text overlays)"
+      ]
+    }
+  ]
+}

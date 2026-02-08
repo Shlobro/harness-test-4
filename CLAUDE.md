@@ -1,0 +1,9 @@
+- Always start with reading product-description.md.
+- each folder must have a developer-guide.md that must be updated after any change in that folder, if there is a folder with code files and no developer guide then create it.
+- the point of the developer guides md files are so that any new developer can understand what is in that folder without having to ever read the code in that folder
+- Read the developer guide in the folder you are editing before making changes.
+- Update the relevant developer guides and their ancestors when behavior changes.
+- There is no reason to mention legacy information in the developer guides the only point is to allow new developers understand the current code without having to read the code.
+- Do not create files over 1000 lines; split files when necessary.
+- Keep folders under 10 code files; `.md` files do not count.
+- Keep .md developer guides under 500 lines long. if there is a developer guide that is longer then compact it while making sure it still gives all the information needed to understand all code files in that folder.

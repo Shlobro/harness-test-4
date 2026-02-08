@@ -2,11 +2,13 @@ from src.core.camera import FirstPersonCamera
 from src.core.collision import AABB, CollisionWorld
 from src.core.input_handler import InputHandler, InputSnapshot
 from src.core.movement import PlayerMovementController
+from src.core.raycasting import RaycastingSystem, RaycastTarget
 from src.player.player import Player
 from src.projectiles.physics import ProjectilePhysicsSystem
 from src.weapons.assault_rifle import AssaultRifle
 from src.weapons.rpg import RPG
 from src.weapons.shotgun import Shotgun
+from src.weapons.visuals import get_weapon_visual
 
 
 def test_camera_mouse_look_uses_input_handler_and_clamps_pitch():
@@ -62,6 +64,39 @@ def test_player_weapon_switch_reload_and_game_over_respawn():
     assert player.position == (1.0, 1.8, 2.0)
 
 
+def test_smooth_weapon_switch_transition_flow():
+    player = Player.with_starter_loadout(start_health=100, start_money=0)
+    player.add_weapon(Shotgun())
+    started = player.start_smooth_weapon_switch("Shotgun", now=1.0)
+    assert started is True
+    assert player.is_weapon_switching is True
+    assert player.equipped_weapon_name == "Pistol"
+    assert player.update_weapon_switch(1.1) is None
+    equipped = player.update_weapon_switch(1.21)
+    assert equipped == "Shotgun"
+    assert player.equipped_weapon_name == "Shotgun"
+    assert player.is_weapon_switching is False
+
+
+def test_player_hitscan_shooting_uses_raycasting():
+    player = Player.with_starter_loadout(start_health=100, start_money=0)
+    raycasting = RaycastingSystem()
+    hit = player.shoot_hitscan(
+        now=1.0,
+        origin=(0.0, 0.0, 0.0),
+        direction=(1.0, 0.0, 0.0),
+        max_distance=30.0,
+        raycasting_system=raycasting,
+        targets=[
+            RaycastTarget(target_id="bot-a", center=(5.0, 0.0, 0.0), radius=0.6),
+            RaycastTarget(target_id="bot-b", center=(12.0, 0.0, 0.0), radius=1.0),
+        ],
+    )
+    assert hit is not None
+    assert hit.target_id == "bot-a"
+    assert player.equipped_weapon.ammo_in_magazine == 11
+
+
 def test_shotgun_assault_rifle_and_rpg_behaviors():
     shotgun = Shotgun()
     payload = shotgun.create_projectile_payload(
@@ -80,6 +115,13 @@ def test_shotgun_assault_rifle_and_rpg_behaviors():
     assert rpg.crash_triggered is False
     assert rpg.fire(2.0) is True
     assert rpg.crash_triggered is True
+
+
+def test_weapon_visual_definitions_exist_for_progression_weapons():
+    for weapon_name in ("Pistol", "Shotgun", "AssaultRifle", "RPG"):
+        visual = get_weapon_visual(weapon_name)
+        assert visual.weapon_name == weapon_name
+        assert len(visual.primitives) > 0
 
 
 def test_projectile_system_and_collision_physics():

@@ -9,6 +9,8 @@
 - `shotgun.py`: close-range spread weapon with multi-pellet projectile payload.
 - `assault_rifle.py`: rapid-fire automatic weapon with larger magazine.
 - `rpg.py`: rocket launcher that sets a crash trigger flag when fired.
+- `switching.py`: timed weapon transition state machine for smooth switching UX.
+- `visuals.py`: geometric primitive visual definitions for each progression weapon.
 
 ## Key Behaviors
 - `Weapon.fire(now)` returns `True` only when:
@@ -17,6 +19,8 @@
 - Successful fire events decrement `ammo_in_magazine` by exactly one.
 - `Weapon.reload()` transfers reserve ammo into the magazine and returns rounds loaded.
 - `Weapon.create_projectile_payload(...)` produces normalized projectile spawn payload consumed by the projectile system.
+- `WeaponSwitchState` tracks source/pending weapon names, switch progress, and completion timing.
+- `get_weapon_visual(...)` returns renderer-ready primitive recipes (`box`, `cylinder`, `cone`) for weapon models.
 - `Pistol` defaults:
   - damage `20`
   - fire rate `3` shots/sec

@@ -16,8 +16,8 @@
 - [x] Create input handler for WASD movement and mouse controls
 - [x] Implement player movement with collision detection
 - [x] Create physics system for projectile movement and collision
-- [ ] Implement raycasting system for shooting mechanics
-- [ ] Create game clock and time management system
+- [x] Implement raycasting system for shooting mechanics
+- [x] Create game clock and time management system
 
 ## Player Systems
 
@@ -28,7 +28,7 @@
 - [x] Create player weapon switching logic
 - [x] Implement player shooting mechanics with ammo consumption
 - [x] Add player respawn or game over logic on death
-- [ ] Create src/player folder developer-guide.md
+- [x] Create src/player folder developer-guide.md
 
 ## Weapon System
 
@@ -37,11 +37,11 @@
 - [x] Implement Shotgun weapon with spread pattern and high damage
 - [x] Implement Assault Rifle weapon with rapid fire mechanics
 - [x] Implement RPG weapon with special "crash" trigger behavior
-- [ ] Create weapon switching system with smooth transitions
+- [x] Create weapon switching system with smooth transitions
 - [x] Implement ammo management and reload mechanics
 - [x] Create projectile system for bullets and rockets
-- [ ] Add weapon visual representations using geometric primitives
-- [ ] Create src/weapons folder developer-guide.md
+- [x] Add weapon visual representations using geometric primitives
+- [x] Create src/weapons folder developer-guide.md
 
 ## Shop/Inventory UI
 
@@ -160,10 +160,10 @@
 
 ## Documentation & Polish
 
-- [ ] Update root developer-guide.md with complete architecture overview
-- [ ] Ensure all code folders have up-to-date developer-guide.md files
-- [ ] Create README.md with installation and running instructions
-- [ ] Document controls and gameplay in user-facing documentation
+- [x] Update root developer-guide.md with complete architecture overview
+- [x] Ensure all code folders have up-to-date developer-guide.md files
+- [x] Create README.md with installation and running instructions
+- [x] Document controls and gameplay in user-facing documentation
 - [ ] Add code comments for complex algorithms
 - [ ] Review and compact any developer-guide.md files over 500 lines
 - [ ] Verify no code files exceed 1000 lines

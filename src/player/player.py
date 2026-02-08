@@ -4,8 +4,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from src.core.raycasting import RaycastHit, RaycastingSystem, RaycastTarget
 from src.projectiles.projectile import Projectile
 from src.weapons.pistol import Pistol
+from src.weapons.switching import WeaponSwitchState
 from src.weapons.weapon import Weapon
 
 
@@ -20,6 +22,7 @@ class Player:
     rotation: tuple[float, float] = (0.0, 0.0)
     inventory: dict[str, Weapon] = field(default_factory=dict)
     equipped_weapon_name: str | None = None
+    switch_state: WeaponSwitchState = field(default_factory=WeaponSwitchState)
     is_game_over: bool = False
 
     @classmethod
@@ -107,6 +110,41 @@ class Player:
         self.equipped_weapon_name = weapon_names[next_index]
         return self.equipped_weapon_name
 
+    @property
+    def is_weapon_switching(self) -> bool:
+        return self.switch_state.is_switching
+
+    def start_smooth_weapon_switch(self, weapon_name: str, now: float) -> bool:
+        """Begin a timed switch transition to an owned weapon."""
+        if weapon_name not in self.inventory:
+            raise ValueError(f"Weapon '{weapon_name}' not in inventory.")
+        if self.equipped_weapon_name is None:
+            self.equipped_weapon_name = weapon_name
+            return False
+        return self.switch_state.start_switch(self.equipped_weapon_name, weapon_name, now)
+
+    def start_smooth_cycle_weapon(self, now: float, direction: int = 1) -> bool:
+        """Begin a timed switch to the next/previous inventory weapon."""
+        if direction == 0:
+            raise ValueError("direction cannot be 0.")
+        weapon_names = list(self.inventory.keys())
+        if not weapon_names:
+            raise ValueError("No weapons available in inventory.")
+        if self.equipped_weapon_name not in weapon_names:
+            self.equipped_weapon_name = weapon_names[0]
+            return False
+        current_index = weapon_names.index(self.equipped_weapon_name)
+        next_index = (current_index + direction) % len(weapon_names)
+        return self.start_smooth_weapon_switch(weapon_names[next_index], now)
+
+    def update_weapon_switch(self, now: float) -> str | None:
+        """Complete active smooth transition and return equipped weapon when done."""
+        next_weapon = self.switch_state.complete_if_ready(now)
+        if next_weapon is None:
+            return None
+        self.equipped_weapon_name = next_weapon
+        return next_weapon
+
     def reload_weapon(self) -> int:
         return self.equipped_weapon.reload()
 
@@ -130,6 +168,26 @@ class Player:
             direction=direction,
         )
         return [Projectile.from_payload(item) for item in payload]
+
+    def shoot_hitscan(
+        self,
+        *,
+        now: float,
+        origin: tuple[float, float, float],
+        direction: tuple[float, float, float],
+        targets: list[RaycastTarget],
+        raycasting_system: RaycastingSystem,
+        max_distance: float = 120.0,
+    ) -> RaycastHit | None:
+        """Fire equipped weapon and return nearest hit-scan hit, if any."""
+        if not self.shoot(now):
+            return None
+        return raycasting_system.cast_ray(
+            origin=origin,
+            direction=direction,
+            max_distance=max_distance,
+            targets=targets,
+        )
 
     def respawn(self, spawn_position: tuple[float, float, float]) -> None:
         """Reset player death/game-over state and place at spawn."""

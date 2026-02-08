@@ -2,6 +2,7 @@ import pytest
 
 from src.core.game_clock import GameClock
 from src.core.game_loop import GameLoop
+from src.core.raycasting import RaycastingSystem, RaycastTarget
 from src.core.game_state import GameState, GameStateManager
 from src.core.input_handler import InputHandler, InputSnapshot
 
@@ -17,6 +18,46 @@ def test_game_clock_tracks_delta_and_elapsed_time():
     assert clock.tick(10.75) == 0.5
     assert clock.elapsed_time == 0.75
     assert clock.frame_count == 2
+
+
+def test_game_clock_pause_and_time_scale_controls():
+    clock = GameClock()
+    clock.tick(0.0)
+
+    clock.set_time_scale(0.5)
+    assert clock.tick(2.0) == 1.0
+    assert clock.elapsed_time == 1.0
+    assert clock.unscaled_elapsed_time == 2.0
+
+    clock.set_paused(True)
+    assert clock.tick(3.0) == 0.0
+    assert clock.elapsed_time == 1.0
+    assert clock.unscaled_elapsed_time == 3.0
+
+    clock.set_paused(False)
+    assert clock.tick(5.0) == 1.0
+    assert clock.elapsed_time == 2.0
+    assert clock.frame_count == 2
+
+    with pytest.raises(ValueError):
+        clock.set_time_scale(0.0)
+
+
+def test_raycasting_system_returns_closest_valid_target():
+    system = RaycastingSystem()
+    hit = system.cast_ray(
+        origin=(0.0, 0.0, 0.0),
+        direction=(1.0, 0.0, 0.0),
+        max_distance=20.0,
+        targets=[
+            RaycastTarget(target_id="far", center=(10.0, 0.0, 0.0), radius=1.0),
+            RaycastTarget(target_id="near", center=(4.0, 0.0, 0.0), radius=0.5),
+            RaycastTarget(target_id="inactive", center=(2.0, 0.0, 0.0), radius=0.5, is_active=False),
+        ],
+    )
+    assert hit is not None
+    assert hit.target_id == "near"
+    assert hit.distance == pytest.approx(3.5)
 
 
 def test_state_manager_validates_transitions():

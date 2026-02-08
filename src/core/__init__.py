@@ -7,6 +7,7 @@ from src.core.game_loop import GameLoop
 from src.core.game_state import GameState, GameStateManager
 from src.core.input_handler import InputFrame, InputHandler, InputSnapshot
 from src.core.movement import PlayerMovementController
+from src.core.raycasting import RaycastHit, RaycastingSystem, RaycastTarget
 
 __all__ = [
     "AABB",
@@ -20,4 +21,7 @@ __all__ = [
     "InputHandler",
     "InputSnapshot",
     "PlayerMovementController",
+    "RaycastHit",
+    "RaycastingSystem",
+    "RaycastTarget",
 ]

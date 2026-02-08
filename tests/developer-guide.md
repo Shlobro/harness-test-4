@@ -14,9 +14,9 @@ This directory contains the automated test suite for the FPS Bot Arena project.
 
 ## Current Test Modules
 - `test_config.py`: validates immutable config defaults.
-- `test_core_systems.py`: validates game clock, state transitions, input handling, and loop update dispatch behavior.
+- `test_core_systems.py`: validates game clock timing controls, raycasting behavior, state transitions, input handling, and loop update dispatch behavior.
 - `test_player_and_weapons.py`: validates player health/economy/inventory/shooting and weapon cooldown/ammo behavior.
-- `test_advanced_combat_and_movement.py`: validates first-person camera look, movement collision/slide, weapon switching + reload + respawn, new weapon behaviors, and projectile physics collisions.
+- `test_advanced_combat_and_movement.py`: validates camera look, movement collision/slide, smooth weapon switching transitions, hit-scan shooting, weapon visuals, weapon behaviors, and projectile collisions.
 
 ## Running Tests
 To run all tests, execute the following command from the project root:

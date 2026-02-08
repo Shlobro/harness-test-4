@@ -2,6 +2,7 @@
 
 ## Purpose
 Stores review output files produced by automated or manual code reviews. Each file is intentionally minimal and may be empty when there are no findings for that category.
+Review files should contain only issue lists (no positive notes).
 
 ## Files
 `architecture.md`

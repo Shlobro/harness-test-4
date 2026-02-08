@@ -1,7 +1,8 @@
-Initialize project structure with configuration, documentation, and tests
+Implement core gameplay foundations, player, and weapon systems
 
-- Set up directory structure for source, assets, config, and tests.
-- Add initial configuration handling in `config/`.
-- Create comprehensive documentation including product description, developer guides, and review guidelines.
-- Add testing infrastructure with initial config tests.
-- Initialize project metadata files.
+- Implement `GameLoop`, `GameStateManager`, `InputHandler`, and `GameClock` in `src/core/`.
+- Implement `Player` class with health, economy, inventory, and shooting logic in `src/player/`.
+- Implement `Weapon` base class and `Pistol` in `src/weapons/`.
+- Add comprehensive unit tests in `tests/` for all new systems.
+- Update documentation and task tracking to reflect progress.
+- Improve error handling for weapon equipping, fire rate validation, and game loop callbacks.

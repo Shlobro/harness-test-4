@@ -74,7 +74,7 @@
 - [x] Implement money pickup collision detection
 - [x] Add money collection logic that updates player balance
 - [x] Create visual representation for money pickups (glowing cubes/spheres)
-- [ ] Balance weapon prices according to progression curve
+- [x] Balance weapon prices according to progression curve
 - [x] Create src/economy folder developer-guide.md
 
 ## Environment & Level Design
@@ -91,14 +91,15 @@
 
 ## HUD System
 
-- [ ] Create HUD overlay rendering system
-- [ ] Implement health bar display with visual updates
-- [ ] Create ammo counter display showing current/max ammo
-- [ ] Implement money balance display
-- [ ] Add crosshair in center of screen
-- [ ] Create damage indicator visual feedback
-- [ ] Add kill notification or counter display
-- [ ] Create src/hud folder developer-guide.md
+- [x] Create HUD overlay rendering system
+- [x] Implement health bar display with visual updates
+- [x] Create ammo counter display showing current/max ammo
+- [x] Implement money balance display
+- [x] Add crosshair in center of screen
+- [x] Create damage indicator visual feedback
+- [x] Add kill notification or counter display
+- [x] Create src/hud folder developer-guide.md
+- [ ] Integrate HudOverlayController event hooks into the runtime update loop (damage + kill events)
 
 ## Special Effect: "The Glitch"
 

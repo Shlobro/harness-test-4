@@ -13,7 +13,7 @@ def test_shop_wheel_layout_distributes_entries_radially_with_prices():
 
     entries = controller.get_entries(player)
     assert [entry.weapon_name for entry in entries] == ["Shotgun", "AssaultRifle", "RPG"]
-    assert [entry.price for entry in entries] == [300, 900, 2500]
+    assert [entry.price for entry in entries] == [250, 800, 2000]
     assert [entry.slot_index for entry in entries] == [0, 1, 2]
     assert [entry.angle_degrees for entry in entries] == pytest.approx([-90.0, 30.0, 150.0])
 
@@ -83,7 +83,7 @@ def test_open_shop_pauses_time_and_moves_state_to_paused_then_resumes():
 
 
 def test_shop_entries_show_affordability_ownership_and_equipped_flags():
-    player = Player.with_starter_loadout(start_health=100, start_money=850)
+    player = Player.with_starter_loadout(start_health=100, start_money=700)
     controller = ShopWheelController()
     controller.purchase_or_equip(player=player, weapon_name="Shotgun")
 
@@ -104,8 +104,8 @@ def test_purchase_logic_buys_when_affordable_and_rejects_otherwise():
     shotgun_result = controller.purchase_or_equip(player=player, weapon_name="Shotgun")
     assert shotgun_result.success is True
     assert shotgun_result.action == "purchased"
-    assert shotgun_result.amount_spent == 300
-    assert player.money == 50
+    assert shotgun_result.amount_spent == 250
+    assert player.money == 100
     assert "Shotgun" in player.inventory
     assert player.equipped_weapon_name == "Shotgun"
 

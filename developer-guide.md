@@ -14,6 +14,7 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - Weapon system with pistol, shotgun, assault rifle, RPG, switch transitions, and primitive visual recipes
 - Projectile entities and physics for bullets, pellets, and rockets
 - Shop wheel UI logic with radial layout, weapon prices, affordability feedback, purchase validation, and inventory equip flow
+- HUD overlay logic for health/ammo/money/crosshair, damage feedback, and kill notifications
 - Multi-room facility model with doorway connectivity, cover placements, lighting profile, and nav waypoints
 - Collision world generation from environment rooms/doorways/cover for movement and projectile systems
 - Bot runtime model with stateful health/death handling, shot variance, tactical action selection, cover/flank planning, and wave spawning
@@ -26,6 +27,7 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
   - `src/weapons/`: weapon base model, concrete implementations, visual definitions, and switch transition state.
   - `src/projectiles/`: projectile entity construction and world collision physics.
   - `src/ui/`: shop wheel layout + controller logic for open/close, pause synchronization, and purchasing/equipping.
+  - `src/hud/`: render-ready HUD state generation and transient damage/kill feedback timers.
   - `src/ai/`: bot runtime model, bot aiming variance helper, tactical decisions, and wave progression systems.
   - `src/environment/`: room/doorway/cover layout definitions plus collision/nav data builders.
   - `src/economy/`: money pickup entities, spawn/update/collect systems, and visual style definitions.
@@ -42,6 +44,7 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 ## Current Runtime Config
 - `config/config.py` exposes `GAME_CONFIG` and `ECONOMY_CONFIG` dataclass instances.
 - Game systems should import from `config.config` rather than duplicating constant values.
+- Current economy progression curve: Shotgun `250`, AssaultRifle `800`, RPG `2000`.
 
 ## Implemented Gameplay Foundations
 - `GameLoop.step(now)` advances time each frame and dispatches updates only while in `playing`.
@@ -66,6 +69,7 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - `environment.build_collision_world(...)` transforms environment geometry into wall+cover collision AABBs.
 - `environment.build_waypoint_pathfinder(...)` builds validated nav graphs from facility waypoint data.
 - `MoneyPickupSystem` manages spawned money drops, pickup collisions, TTL expiration, and player-balance updates.
+- `HudOverlayController` builds a single HUD payload and tracks timed damage/kill feedback effects.
 
 ## Development Notes
 - Keep gameplay constants in `config/config.py` until a richer configuration layer is needed.

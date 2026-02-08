@@ -10,9 +10,9 @@
 ## Core Concepts
 - `ShopCatalogItem` defines a weapon listing with `weapon_name`, `price`, and a weapon factory.
 - `default_shop_catalog()` provides progression store inventory:
-  - Shotgun (`300`)
-  - AssaultRifle (`900`)
-  - RPG (`2500`)
+  - Shotgun (`250`)
+  - AssaultRifle (`800`)
+  - RPG (`2000`)
 - `ShopWheelLayout.build_entries(...)` converts catalog items into render-ready `ShopWheelEntry` objects with:
   - radial slot position (`angle_degrees`, `anchor_x`, `anchor_y`)
   - ownership state (`is_owned`)

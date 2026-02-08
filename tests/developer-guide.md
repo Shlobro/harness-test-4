@@ -20,6 +20,7 @@ This directory contains the automated test suite for the FPS Bot Arena project.
 - `test_shop_ui.py`: validates shop wheel radial layout, `B`-toggle input behavior, pause/state synchronization while shopping, pricing visibility, affordability feedback, purchase validation, and owned-weapon selection/equip behavior.
 - `test_ai_and_economy.py`: validates bot health/state transitions, waypoint pathfinding, accuracy-varied bot shooting, death money-drop spawning, pickup collision, visual mapping, and player collection flow.
 - `test_environment_and_tactics.py`: validates multi-room facility structure, doorway-aware collision generation, environment nav graph usage, tactical cover/flank decisions, and wave difficulty scaling/spawning.
+- `test_hud.py`: validates HUD snapshot generation (health/ammo/money/crosshair), damage indicator timing, and kill notification/counter behavior.
 
 ## Running Tests
 To run all tests, execute the following command from the project root:

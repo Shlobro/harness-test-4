@@ -9,6 +9,7 @@
 - `weapons/`: reusable weapon abstractions, concrete weapons (pistol/shotgun/assault rifle/RPG), switch-transition state, and primitive visual definitions.
 - `projectiles/`: projectile entities plus physics stepping and world collision checks.
 - `ui/`: shop wheel catalog, radial layout generation, affordability/equipped status projection, and open/close interaction controller.
+- `hud/`: HUD overlay payload generation for health, ammo, money, crosshair, damage feedback, and kill notifications.
 - `ai/`: bot runtime model, shot-accuracy helpers, tactical decision/cover/flank planners, and wave spawning+difficulty scaling.
 - `economy/`: money pickup entities, glowing primitive visual definitions, pickup lifecycle, and player collection logic.
 - `environment/`: multi-room facility definitions, doorway connectivity, cover placements, collision world generation, and nav graph generation.
@@ -29,3 +30,4 @@
 13. `ai.tactics` chooses between attack/cover/flank and computes flanking approach routes.
 14. `ai.waves.WaveDirector` scales wave difficulty and spawns multiple bots from configured spawn positions.
 15. `economy.money.MoneyPickupSystem` resolves pickup collisions and deposits collected money to `player.Player`.
+16. `hud.HudOverlayController` builds render-ready HUD state and manages damage/kill feedback timers.

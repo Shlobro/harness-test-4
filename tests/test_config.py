@@ -13,9 +13,9 @@ def test_game_config_defaults():
 
 def test_economy_config_defaults():
     """Verify that EconomyConfig loads with the expected default values."""
-    assert ECONOMY_CONFIG.shotgun_price == 300
-    assert ECONOMY_CONFIG.assault_rifle_price == 900
-    assert ECONOMY_CONFIG.rpg_price == 2500
+    assert ECONOMY_CONFIG.shotgun_price == 250
+    assert ECONOMY_CONFIG.assault_rifle_price == 800
+    assert ECONOMY_CONFIG.rpg_price == 2000
     assert isinstance(ECONOMY_CONFIG, EconomyConfig)
 
 def test_config_immutability():

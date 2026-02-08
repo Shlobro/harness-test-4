@@ -22,9 +22,9 @@ class GameConfig:
 class EconomyConfig:
     """Weapon pricing configuration used by shop and progression systems."""
 
-    shotgun_price: int = 300
-    assault_rifle_price: int = 900
-    rpg_price: int = 2500
+    shotgun_price: int = 250
+    assault_rifle_price: int = 800
+    rpg_price: int = 2000
 
 
 GAME_CONFIG = GameConfig()

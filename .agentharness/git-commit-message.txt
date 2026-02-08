@@ -1,7 +1,6 @@
-Implement Environment layout, Tactical AI, and Wave systems
+Implement HUD system and rebalance economy
 
-- Add `src/environment` with multi-room facility, collision builder, and nav graph generation.
-- Add `src/ai/tactics.py` for cover evaluation, flanking routes, and tactical state selection.
-- Add `src/ai/waves.py` for wave progression, difficulty scaling, and spawning.
-- Add `tests/test_environment_and_tactics.py` to validate environment generation and AI tactics.
-- Update `src/ai/__init__.py` and documentation to reflect new modules.
+- Add `src/hud` with `HudOverlayController` for health, ammo, money, and feedback.
+- Add `tests/test_hud.py` to validate HUD behavior.
+- Rebalance weapon prices in `config/config.py` (Shotgun 250, AR 800, RPG 2000).
+- Update tests and documentation to reflect HUD addition and price changes.

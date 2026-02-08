@@ -13,6 +13,7 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - Player model with health, money, inventory, immediate/smooth weapon switching, reload, projectile fire, hit-scan fire, and respawn/game-over
 - Weapon system with pistol, shotgun, assault rifle, RPG, switch transitions, and primitive visual recipes
 - Projectile entities and physics for bullets, pellets, and rockets
+- Shop wheel UI logic with radial layout, weapon prices, affordability feedback, purchase validation, and inventory equip flow
 
 ## Directory Map
 - `src/`: runtime game systems.
@@ -20,6 +21,7 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
   - `src/player/`: player runtime state, combat APIs, instant/smooth inventory switching, reload, hit-scan, and respawn.
   - `src/weapons/`: weapon base model, concrete implementations, visual definitions, and switch transition state.
   - `src/projectiles/`: projectile entity construction and world collision physics.
+  - `src/ui/`: shop wheel layout + controller logic for open/close, pause synchronization, and purchasing/equipping.
 - `assets/`: static assets (models, audio, textures). Currently placeholder-only.
 - `config/`: centralized runtime configuration modules.
 - `tests/`: automated test suite.
@@ -39,6 +41,7 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - `GameClock` supports time scaling and pause/resume without losing wall-clock tracking.
 - `GameStateManager` enforces valid transitions across `menu`, `playing`, `paused`, and `crashed`.
 - `InputHandler.build_frame(...)` translates keyboard/mouse input into movement/look axes.
+- `InputHandler.build_frame(...)` also emits one-shot `toggle_shop` actions for `B` key presses.
 - `FirstPersonCamera` tracks yaw/pitch and clamps vertical look.
 - `PlayerMovementController` applies yaw-relative movement and resolves AABB wall collisions with slide behavior.
 - `RaycastingSystem` resolves nearest-target line traces for hit-scan shooting paths.
@@ -47,6 +50,7 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - `Pistol`, `Shotgun`, `AssaultRifle`, and `RPG` provide progression-ready weapon behavior; RPG toggles a crash trigger flag when fired.
 - `get_weapon_visual(...)` returns geometric primitive recipes for all progression weapons.
 - `ProjectilePhysicsSystem` advances projectile motion and deactivates projectiles that hit walls or leave world bounds.
+- `ShopWheelController` renders shop entry state (owned/equipped/affordable), toggles pause when opened, and enforces money checks for purchases.
 
 ## Development Notes
 - Keep gameplay constants in `config/config.py` until a richer configuration layer is needed.

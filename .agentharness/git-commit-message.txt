@@ -1,7 +1,7 @@
-Implement raycasting, clock controls, smooth switching, and weapon visuals
+Implement Shop Wheel UI with 'B' key toggle and inventory management
 
-- Implement `RaycastingSystem` for hit-scan shooting and integrate into `Player`.
-- Upgrade `GameClock` to support pause, resume, and time scaling.
-- Add `WeaponSwitchState` for smooth weapon transitions and geometric visual definitions.
-- Update documentation, tasks, and expand tests for core systems and combat.
-- Clean up bytecode files and update repository tracking.
+- Create `src/ui` with radial menu layout, pricing, and purchase/equip logic.
+- Update `InputHandler` to emit `toggle_shop` event on 'B' key press.
+- Integrate shop open/close with game pause and state management.
+- Add `tests/test_shop_ui.py` covering layout, affordability, and interactions.
+- Update developer guides and mark shop tasks as complete in `tasks.md`.

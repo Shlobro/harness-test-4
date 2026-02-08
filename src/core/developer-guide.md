@@ -18,6 +18,7 @@
 - `GameLoop.step(now)` always advances the clock, but only runs callbacks in `playing`.
 - `GameClock` supports paused time and positive time-scale multipliers for slowed/accelerated simulation.
 - Mouse look is sensitivity-scaled and pitch is inverted (`mouse up` => positive look pitch).
+- Input frames include `toggle_shop`, triggered only on `B` key press edges (held key does not retrigger).
 - Camera pitch is clamped to avoid flipping.
 - Movement uses local input (`WASD`) transformed by yaw into world-space direction.
 - Movement checks full displacement first, then attempts axis-aligned slide fallback before stopping.

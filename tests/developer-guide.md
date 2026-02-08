@@ -17,6 +17,7 @@ This directory contains the automated test suite for the FPS Bot Arena project.
 - `test_core_systems.py`: validates game clock timing controls, raycasting behavior, state transitions, input handling, and loop update dispatch behavior.
 - `test_player_and_weapons.py`: validates player health/economy/inventory/shooting and weapon cooldown/ammo behavior.
 - `test_advanced_combat_and_movement.py`: validates camera look, movement collision/slide, smooth weapon switching transitions, hit-scan shooting, weapon visuals, weapon behaviors, and projectile collisions.
+- `test_shop_ui.py`: validates shop wheel radial layout, `B`-toggle input behavior, pause/state synchronization while shopping, pricing visibility, affordability feedback, purchase validation, and owned-weapon selection/equip behavior.
 
 ## Running Tests
 To run all tests, execute the following command from the project root:

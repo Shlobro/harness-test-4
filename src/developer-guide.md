@@ -8,6 +8,7 @@
 - `player/`: player runtime model (health, money, inventory, immediate + smooth weapon switching, reload, hit-scan/projectile shooting, game-over/respawn).
 - `weapons/`: reusable weapon abstractions, concrete weapons (pistol/shotgun/assault rifle/RPG), switch-transition state, and primitive visual definitions.
 - `projectiles/`: projectile entities plus physics stepping and world collision checks.
+- `ui/`: shop wheel catalog, radial layout generation, affordability/equipped status projection, and open/close interaction controller.
 
 ## Integration Flow
 1. The platform layer collects raw input and passes it to `core.input_handler.InputHandler`.
@@ -17,3 +18,4 @@
 5. Player actions call weapon models for cooldown/ammo/reload behavior, smooth switch timing, and projectile payload generation.
 6. `projectiles.physics.ProjectilePhysicsSystem` advances active projectiles and resolves wall/bounds collisions.
 7. Hit-scan fire paths use `core.raycasting.RaycastingSystem` to resolve nearest target hits.
+8. `core.input_handler.InputHandler` emits a `toggle_shop` action on `B` key press edges for `ui.shop_wheel.ShopWheelController` consumption.

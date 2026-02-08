@@ -22,6 +22,7 @@ class InputFrame:
     move_z: float
     look_yaw: float
     look_pitch: float
+    toggle_shop: bool = False
 
 
 class InputHandler:
@@ -29,6 +30,7 @@ class InputHandler:
 
     def __init__(self, mouse_sensitivity: float) -> None:
         self.mouse_sensitivity = mouse_sensitivity
+        self._previous_pressed_keys: set[str] = set()
 
     def build_frame(self, snapshot: InputSnapshot) -> InputFrame:
         """Compute movement axis values and scaled look deltas."""
@@ -36,12 +38,15 @@ class InputHandler:
         move_z = self._axis(snapshot.pressed_keys, positive="w", negative="s")
         look_yaw = snapshot.mouse_delta_x * self.mouse_sensitivity
         look_pitch = -snapshot.mouse_delta_y * self.mouse_sensitivity
+        toggle_shop = "b" in snapshot.pressed_keys and "b" not in self._previous_pressed_keys
+        self._previous_pressed_keys = set(snapshot.pressed_keys)
 
         return InputFrame(
             move_x=move_x,
             move_z=move_z,
             look_yaw=look_yaw,
             look_pitch=look_pitch,
+            toggle_shop=toggle_shop,
         )
 
     @staticmethod
@@ -53,4 +58,3 @@ class InputHandler:
         if negative in keys:
             return -1.0
         return 0.0
-

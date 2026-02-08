@@ -45,15 +45,15 @@
 
 ## Shop/Inventory UI
 
-- [ ] Design radial/wheel menu layout for inventory and shop
-- [ ] Implement 'B' key to open and close the shop wheel
-- [ ] Create shop UI that pauses game time when open
-- [ ] Display available weapons with prices in the shop wheel
-- [ ] Implement weapon purchase logic with money validation
-- [ ] Show currently equipped weapon in the shop wheel
-- [ ] Add visual feedback for affordable vs unaffordable items
-- [ ] Implement weapon selection from inventory in the shop wheel
-- [ ] Create src/ui folder developer-guide.md
+- [x] Design radial/wheel menu layout for inventory and shop
+- [x] Implement 'B' key to open and close the shop wheel
+- [x] Create shop UI that pauses game time when open
+- [x] Display available weapons with prices in the shop wheel
+- [x] Implement weapon purchase logic with money validation
+- [x] Show currently equipped weapon in the shop wheel
+- [x] Add visual feedback for affordable vs unaffordable items
+- [x] Implement weapon selection from inventory in the shop wheel
+- [x] Create src/ui folder developer-guide.md
 
 ## Enemy AI System
 

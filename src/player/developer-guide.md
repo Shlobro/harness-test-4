@@ -18,6 +18,12 @@
 - Inventory logic:
   - Weapons are stored by name.
   - `equip_weapon` requires ownership.
+  - `cycle_weapon(direction)` supports next/previous switching through owned weapons.
 - Combat logic:
   - `shoot(now)` delegates to the equipped weapon and consumes ammo only on successful shots.
-
+  - `reload_weapon()` delegates magazine refill from reserve ammo.
+  - `shoot_projectiles(...)` returns instantiated projectile entities for projectile simulation systems.
+- Death/respawn logic:
+  - Health reaching `0` marks `is_game_over=True`.
+  - `shoot` is blocked while game over.
+  - `respawn(spawn_position)` resets health and clears game-over state.

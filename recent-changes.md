@@ -1,35 +1,21 @@
 # Recent Changes
 
-## 2026-02-08
+## 2026-02-08 (Code Review Fix)
+- Fixed `CollisionWorld.outside_world_bounds` in `src/core/collision.py` to use containment check instead of intersection check. Now correctly returns `True` when any part of a box is outside world bounds, preventing players/projectiles from drifting outside world edges.
 
-- Implemented foundational gameplay runtime modules:
-  - `src/core/game_state.py`: validated game state manager for `menu`, `playing`, `paused`, `crashed`.
-  - `src/core/game_clock.py`: delta-time and elapsed-time tracking.
-  - `src/core/input_handler.py`: WASD + mouse-look input normalization.
-  - `src/core/game_loop.py`: frame-stepped loop that dispatches updates only in `playing`.
-- Implemented player systems in `src/player/player.py`:
-  - player creation with position/rotation/health/money
-  - health damage/heal/death behavior
-  - money add/spend behavior with validation
-  - weapon inventory ownership and equip rules
-  - shooting through equipped weapon with ammo/cooldown enforcement
-- Implemented weapon systems:
-  - `src/weapons/weapon.py`: reusable weapon base class with common stats and cooldown-aware firing.
-  - `src/weapons/pistol.py`: starter pistol stats and behavior.
-- Added/updated developer documentation:
-  - `src/developer-guide.md`
-  - `src/core/developer-guide.md`
-  - `src/player/developer-guide.md`
-  - `src/weapons/developer-guide.md`
-  - `tests/developer-guide.md`
-  - root `developer-guide.md`
-- Added automated tests and fixed import configuration:
-  - `tests/conftest.py`
-  - `tests/test_core_systems.py`
-  - `tests/test_player_and_weapons.py`
-- Added `test_player_position_and_rotation_setters` to `tests/test_player_and_weapons.py` to verify transform updates.
-- **Error Handling Improvements (Code Review Fixes)**:
-  - `src/player/player.py`: Changed `equipped_weapon_name` default from `"Pistol"` to `None`. Added validation in `equipped_weapon` property to raise descriptive `ValueError` if weapon is not equipped or not in inventory, preventing `KeyError` crashes.
-  - `src/weapons/weapon.py`: Added validation in `__post_init__` to ensure `fire_rate > 0`, preventing `ZeroDivisionError` in `cooldown_seconds` property.
-  - `src/core/game_loop.py`: Added per-callback exception handling in `step()` method. Callbacks that fail now log errors without crashing the game loop, ensuring other callbacks continue to run.
-- Validation: `pytest -q` passes (`14 passed`).
+## 2026-02-08
+- Implemented first-person camera state in `src/core/camera.py` with yaw/pitch mouse-look updates and pitch clamping.
+- Implemented collision primitives and movement controller in `src/core/collision.py` and `src/core/movement.py` for player movement with wall/bounds collision and slide resolution.
+- Added new weapon implementations:
+  - `src/weapons/shotgun.py` (pellet spread payload)
+  - `src/weapons/assault_rifle.py` (rapid fire)
+  - `src/weapons/rpg.py` (crash trigger flag when fired)
+- Extended `src/weapons/weapon.py` with ammo reload mechanics, total ammo tracking, and projectile payload generation.
+- Extended `src/player/player.py` with weapon cycling, reload delegation, projectile firing API, game-over state on death, and respawn handling.
+- Added projectile package `src/projectiles/`:
+  - `projectile.py` for projectile entities and movement/lifetime
+  - `physics.py` for projectile movement and world collision deactivation
+- Updated package exports in `src/core/__init__.py`, `src/player/__init__.py`, and `src/weapons/__init__.py`.
+- Added `tests/test_advanced_combat_and_movement.py` covering camera look, movement collision, weapon switching/reload/respawn, new weapons, and projectile physics.
+- Verified full test suite passes: `19 passed`.
+

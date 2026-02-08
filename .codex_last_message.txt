@@ -1,3 +1,1 @@
-No UI/UX issues found in the current `git diff`, so `review/ui_ux.md` remains empty.
-
-Tests not run (not requested).
+No UI/UX issues found in `git diff`. `review/ui_ux.md` remains empty.

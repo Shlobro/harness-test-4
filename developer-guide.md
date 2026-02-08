@@ -7,14 +7,17 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - Core runtime loop and timing
 - State machine for high-level game flow
 - Input normalization for WASD + mouse look
-- Player model with health, money, inventory, and shooting
-- Weapon base behavior and starter pistol
+- First-person camera and movement/collision simulation
+- Player model with health, money, inventory, weapon switching, reload, and respawn/game-over
+- Weapon system with pistol, shotgun, assault rifle, and RPG
+- Projectile entities and physics for bullets, pellets, and rockets
 
 ## Directory Map
 - `src/`: runtime game systems.
-  - `src/core/`: game loop, game clock, state manager, input handler.
-  - `src/player/`: player model and starter loadout behavior.
-  - `src/weapons/`: base weapon logic and concrete weapons.
+  - `src/core/`: game loop, game clock, state manager, input, camera, movement, and collision primitives.
+  - `src/player/`: player runtime state, combat APIs, inventory switching, reload, and respawn.
+  - `src/weapons/`: weapon base model and concrete implementations.
+  - `src/projectiles/`: projectile entity construction and world collision physics.
 - `assets/`: static assets (models, audio, textures). Currently placeholder-only.
 - `config/`: centralized runtime configuration modules.
 - `tests/`: automated test suite.
@@ -33,9 +36,12 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - `GameLoop.step(now)` advances time each frame and dispatches updates only while in `playing`.
 - `GameStateManager` enforces valid transitions across `menu`, `playing`, `paused`, and `crashed`.
 - `InputHandler.build_frame(...)` translates keyboard/mouse input into movement/look axes.
-- `Player` enforces bounded health, validated currency operations, inventory ownership checks, and alive-only firing.
-- `Weapon.fire(now)` enforces cooldown + ammo consumption.
-- `Pistol` is the starter weapon with tuned prototype stats.
+- `FirstPersonCamera` tracks yaw/pitch and clamps vertical look.
+- `PlayerMovementController` applies yaw-relative movement and resolves AABB wall collisions with slide behavior.
+- `Player` enforces bounded health, game-over on death, validated currency operations, inventory ownership checks, weapon cycling, reload, projectile firing, and respawn.
+- `Weapon` enforces cooldown/ammo, reload behavior, and projectile payload generation.
+- `Pistol`, `Shotgun`, `AssaultRifle`, and `RPG` provide progression-ready weapon behavior; RPG toggles a crash trigger flag when fired.
+- `ProjectilePhysicsSystem` advances projectile motion and deactivates projectiles that hit walls or leave world bounds.
 
 ## Development Notes
 - Keep gameplay constants in `config/config.py` until a richer configuration layer is needed.

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from src.projectiles.projectile import Projectile
 from src.weapons.pistol import Pistol
 from src.weapons.weapon import Weapon
 
@@ -19,6 +20,7 @@ class Player:
     rotation: tuple[float, float] = (0.0, 0.0)
     inventory: dict[str, Weapon] = field(default_factory=dict)
     equipped_weapon_name: str | None = None
+    is_game_over: bool = False
 
     @classmethod
     def with_starter_loadout(cls, start_health: int, start_money: int) -> "Player":
@@ -58,6 +60,8 @@ class Player:
         if damage < 0:
             raise ValueError("Damage must be non-negative.")
         self.health = max(0, self.health - damage)
+        if self.health == 0:
+            self.is_game_over = True
 
     def heal(self, amount: int) -> None:
         """Restore health without exceeding max health."""
@@ -88,9 +92,47 @@ class Player:
             raise ValueError(f"Weapon '{weapon_name}' not in inventory.")
         self.equipped_weapon_name = weapon_name
 
+    def cycle_weapon(self, direction: int = 1) -> str:
+        """Cycle through inventory weapons and return the newly equipped name."""
+        if direction == 0:
+            raise ValueError("direction cannot be 0.")
+        weapon_names = list(self.inventory.keys())
+        if not weapon_names:
+            raise ValueError("No weapons available in inventory.")
+        if self.equipped_weapon_name not in weapon_names:
+            self.equipped_weapon_name = weapon_names[0]
+            return self.equipped_weapon_name
+        current_index = weapon_names.index(self.equipped_weapon_name)
+        next_index = (current_index + direction) % len(weapon_names)
+        self.equipped_weapon_name = weapon_names[next_index]
+        return self.equipped_weapon_name
+
+    def reload_weapon(self) -> int:
+        return self.equipped_weapon.reload()
+
     def shoot(self, now: float) -> bool:
         """Attempt to fire the equipped weapon. Returns True when a shot is fired."""
-        if not self.is_alive:
+        if not self.is_alive or self.is_game_over:
             return False
         return self.equipped_weapon.fire(now)
 
+    def shoot_projectiles(
+        self,
+        now: float,
+        origin: tuple[float, float, float],
+        direction: tuple[float, float, float],
+    ) -> list[Projectile]:
+        """Fire the equipped weapon and return instantiated projectile entities."""
+        if not self.shoot(now):
+            return []
+        payload = self.equipped_weapon.create_projectile_payload(
+            origin=origin,
+            direction=direction,
+        )
+        return [Projectile.from_payload(item) for item in payload]
+
+    def respawn(self, spawn_position: tuple[float, float, float]) -> None:
+        """Reset player death/game-over state and place at spawn."""
+        self.health = self.max_health
+        self.position = spawn_position
+        self.is_game_over = False

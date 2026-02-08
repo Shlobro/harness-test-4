@@ -1,8 +1,8 @@
-Implement core gameplay foundations, player, and weapon systems
+Implement advanced combat, movement, collision, and projectile systems
 
-- Implement `GameLoop`, `GameStateManager`, `InputHandler`, and `GameClock` in `src/core/`.
-- Implement `Player` class with health, economy, inventory, and shooting logic in `src/player/`.
-- Implement `Weapon` base class and `Pistol` in `src/weapons/`.
-- Add comprehensive unit tests in `tests/` for all new systems.
-- Update documentation and task tracking to reflect progress.
-- Improve error handling for weapon equipping, fire rate validation, and game loop callbacks.
+- Implement `FirstPersonCamera`, `CollisionWorld`, and `PlayerMovementController` with wall sliding and bounds checking.
+- Add `Shotgun`, `AssaultRifle`, and `RPG` weapons; implement weapon cycling and reload mechanics.
+- Implement `Projectile` system foundation with physics stepping and collision deactivation.
+- Update `Player` to support projectile firing, game-over state on death, and respawning.
+- Add `tests/test_advanced_combat_and_movement.py` covering new systems.
+- Update documentation and task tracking.

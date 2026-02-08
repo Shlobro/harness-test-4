@@ -12,10 +12,10 @@
 
 - [x] Implement main game loop with frame updates and delta time handling
 - [x] Create game state manager to handle different states (menu, playing, paused, crashed)
-- [ ] Implement camera system with first-person perspective and mouse look controls
+- [x] Implement camera system with first-person perspective and mouse look controls
 - [x] Create input handler for WASD movement and mouse controls
-- [ ] Implement player movement with collision detection
-- [ ] Create physics system for projectile movement and collision
+- [x] Implement player movement with collision detection
+- [x] Create physics system for projectile movement and collision
 - [ ] Implement raycasting system for shooting mechanics
 - [ ] Create game clock and time management system
 
@@ -25,21 +25,21 @@
 - [x] Implement player health system with damage and death handling
 - [x] Create player money/currency tracking system
 - [x] Implement player inventory system to track owned weapons
-- [ ] Create player weapon switching logic
+- [x] Create player weapon switching logic
 - [x] Implement player shooting mechanics with ammo consumption
-- [ ] Add player respawn or game over logic on death
+- [x] Add player respawn or game over logic on death
 - [ ] Create src/player folder developer-guide.md
 
 ## Weapon System
 
 - [x] Create base Weapon class with common properties (damage, ammo, fire rate)
 - [x] Implement Pistol weapon with stats and firing behavior
-- [ ] Implement Shotgun weapon with spread pattern and high damage
-- [ ] Implement Assault Rifle weapon with rapid fire mechanics
-- [ ] Implement RPG weapon with special "crash" trigger behavior
+- [x] Implement Shotgun weapon with spread pattern and high damage
+- [x] Implement Assault Rifle weapon with rapid fire mechanics
+- [x] Implement RPG weapon with special "crash" trigger behavior
 - [ ] Create weapon switching system with smooth transitions
-- [ ] Implement ammo management and reload mechanics
-- [ ] Create projectile system for bullets and rockets
+- [x] Implement ammo management and reload mechanics
+- [x] Create projectile system for bullets and rockets
 - [ ] Add weapon visual representations using geometric primitives
 - [ ] Create src/weapons folder developer-guide.md
 

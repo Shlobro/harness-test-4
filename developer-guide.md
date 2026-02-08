@@ -14,7 +14,9 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - Weapon system with pistol, shotgun, assault rifle, RPG, switch transitions, and primitive visual recipes
 - Projectile entities and physics for bullets, pellets, and rockets
 - Shop wheel UI logic with radial layout, weapon prices, affordability feedback, purchase validation, and inventory equip flow
-- Bot runtime model with stateful health/death handling, shot variance, and waypoint pathfinding
+- Multi-room facility model with doorway connectivity, cover placements, lighting profile, and nav waypoints
+- Collision world generation from environment rooms/doorways/cover for movement and projectile systems
+- Bot runtime model with stateful health/death handling, shot variance, tactical action selection, cover/flank planning, and wave spawning
 - Money drop economy with collectible pickups, collision-based collection, and primitive visual definitions
 
 ## Directory Map
@@ -24,7 +26,8 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
   - `src/weapons/`: weapon base model, concrete implementations, visual definitions, and switch transition state.
   - `src/projectiles/`: projectile entity construction and world collision physics.
   - `src/ui/`: shop wheel layout + controller logic for open/close, pause synchronization, and purchasing/equipping.
-  - `src/ai/`: bot runtime model, bot aiming variance helper, and waypoint graph pathfinding.
+  - `src/ai/`: bot runtime model, bot aiming variance helper, tactical decisions, and wave progression systems.
+  - `src/environment/`: room/doorway/cover layout definitions plus collision/nav data builders.
   - `src/economy/`: money pickup entities, spawn/update/collect systems, and visual style definitions.
 - `assets/`: static assets (models, audio, textures). Currently placeholder-only.
 - `config/`: centralized runtime configuration modules.
@@ -56,7 +59,12 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - `ProjectilePhysicsSystem` advances projectile motion and deactivates projectiles that hit walls or leave world bounds.
 - `ShopWheelController` renders shop entry state (owned/equipped/affordable), toggles pause when opened, and enforces money checks for purchases.
 - `Bot` supports health/state transitions, cooldown-aware shooting with accuracy variance, and money-drop spawning hooks.
+- `ai.tactics` evaluates cover and picks `attack`/`take_cover`/`flank`, including side-approach flank routes.
+- `ai.waves.WaveDirector` scales bot count and difficulty as waves progress.
 - `WaypointPathfinder` computes nearest-waypoint BFS paths for baseline bot movement planning.
+- `environment.create_default_facility_layout()` defines a 5-room indoor map with doorways, cover, waypoints, bot/player spawns, and lighting values.
+- `environment.build_collision_world(...)` transforms environment geometry into wall+cover collision AABBs.
+- `environment.build_waypoint_pathfinder(...)` builds validated nav graphs from facility waypoint data.
 - `MoneyPickupSystem` manages spawned money drops, pickup collisions, TTL expiration, and player-balance updates.
 
 ## Development Notes

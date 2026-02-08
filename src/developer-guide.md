@@ -9,8 +9,9 @@
 - `weapons/`: reusable weapon abstractions, concrete weapons (pistol/shotgun/assault rifle/RPG), switch-transition state, and primitive visual definitions.
 - `projectiles/`: projectile entities plus physics stepping and world collision checks.
 - `ui/`: shop wheel catalog, radial layout generation, affordability/equipped status projection, and open/close interaction controller.
-- `ai/`: bot runtime model, bot shot-accuracy variance helpers, and waypoint pathfinding.
+- `ai/`: bot runtime model, shot-accuracy helpers, tactical decision/cover/flank planners, and wave spawning+difficulty scaling.
 - `economy/`: money pickup entities, glowing primitive visual definitions, pickup lifecycle, and player collection logic.
+- `environment/`: multi-room facility definitions, doorway connectivity, cover placements, collision world generation, and nav graph generation.
 
 ## Integration Flow
 1. The platform layer collects raw input and passes it to `core.input_handler.InputHandler`.
@@ -21,5 +22,10 @@
 6. `projectiles.physics.ProjectilePhysicsSystem` advances active projectiles and resolves wall/bounds collisions.
 7. Hit-scan fire paths use `core.raycasting.RaycastingSystem` to resolve nearest target hits.
 8. `core.input_handler.InputHandler` emits a `toggle_shop` action on `B` key press edges for `ui.shop_wheel.ShopWheelController` consumption.
-9. `ai.bot.Bot` instances can fire at players using inaccuracy-aware aim and spawn money drops on death.
-10. `economy.money.MoneyPickupSystem` resolves pickup collisions and deposits collected money to `player.Player`.
+9. `environment.create_default_facility_layout()` provides rooms/doorways/cover/waypoints as a single world source.
+10. `environment.build_collision_world(...)` generates wall/cover AABBs for movement and projectile collision.
+11. `environment.build_waypoint_pathfinder(...)` creates pathfinding data aligned with the same facility layout.
+12. `ai.bot.Bot` instances can fire at players using inaccuracy-aware aim and spawn money drops on death.
+13. `ai.tactics` chooses between attack/cover/flank and computes flanking approach routes.
+14. `ai.waves.WaveDirector` scales wave difficulty and spawns multiple bots from configured spawn positions.
+15. `economy.money.MoneyPickupSystem` resolves pickup collisions and deposits collected money to `player.Player`.

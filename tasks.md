@@ -59,13 +59,13 @@
 
 - [x] Create Bot class with health, position, and AI state
 - [x] Implement basic bot pathfinding using navigation mesh or waypoints
-- [ ] Create tactical AI decision-making system (attack, take cover, flank)
-- [ ] Implement cover detection and usage logic
-- [ ] Create flanking behavior to approach player from multiple angles
+- [x] Create tactical AI decision-making system (attack, take cover, flank)
+- [x] Implement cover detection and usage logic
+- [x] Create flanking behavior to approach player from multiple angles
 - [x] Implement bot shooting mechanics with accuracy variance
 - [x] Add bot death handling with money drop spawning
-- [ ] Create wave spawning system for multiple bots
-- [ ] Implement bot difficulty scaling across waves
+- [x] Create wave spawning system for multiple bots
+- [x] Implement bot difficulty scaling across waves
 - [x] Create src/ai folder developer-guide.md
 
 ## Money & Economy
@@ -79,15 +79,15 @@
 
 ## Environment & Level Design
 
-- [ ] Create multi-room indoor facility layout using geometric primitives
-- [ ] Implement wall collision detection for player and projectiles
-- [ ] Add cover objects (crates, walls) throughout the facility
-- [ ] Create navigation data for AI pathfinding
+- [x] Create multi-room indoor facility layout using geometric primitives
+- [x] Implement wall collision detection for player and projectiles
+- [x] Add cover objects (crates, walls) throughout the facility
+- [x] Create navigation data for AI pathfinding
 - [ ] Implement room connectivity and doorways
 - [ ] Add environmental lighting setup
 - [ ] Create spawn points for player and bots
 - [ ] Design at least 3-5 distinct rooms with tactical variety
-- [ ] Create src/environment folder developer-guide.md
+- [x] Create src/environment folder developer-guide.md
 
 ## HUD System
 

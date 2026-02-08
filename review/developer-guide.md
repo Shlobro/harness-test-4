@@ -19,6 +19,7 @@ Holds error handling and resilience findings only.
 
 `general.md`
 Holds cross-cutting or uncategorized findings only.
+Leave this file empty when no issues are found in the reviewed diff.
 
 `safety.md`
 Holds security, privacy, or safety findings only.

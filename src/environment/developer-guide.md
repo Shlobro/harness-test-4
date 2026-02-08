@@ -4,7 +4,7 @@
 `src/environment/` defines the indoor facility layout and turns that layout into reusable collision and navigation data.
 
 ## Files
-- `facility.py`: dataclasses for rooms, doorways, cover objects, spawn points, and lighting; includes `create_default_facility_layout()` with a 5-room tactical facility.
+- `facility.py`: dataclasses for rooms, doorways, cover objects, spawn points, and lighting; includes `create_default_facility_layout()` with a validated 5-room tactical facility and helpers for doorway graph traversal and spawn-room lookups.
 - `collision.py`: converts room boundaries + doorway openings + blocking cover into a `CollisionWorld` for player and projectile collision.
 - `navigation.py`: validates layout waypoint links and creates a `WaypointPathfinder`.
 - `__init__.py`: package exports for facility, collision, and navigation helpers.
@@ -16,8 +16,10 @@
 - Waypoint graph and links for AI route planning.
 - Spawn point records for player and bots.
 - Engine-agnostic ambient + directional lighting profile.
+- Layout validation enforces doorway integrity, spawn placement inside rooms, non-zero directional light vectors, and minimum room count.
 
 ## Integration Notes
 - Build runtime collision data with `build_collision_world(layout)` and pass it to movement/projectile systems.
 - Build AI pathfinding with `build_waypoint_pathfinder(layout)` to keep navigation synced with room geometry.
 - Keep room and doorway geometry in `facility.py` as the single source of truth for environment updates.
+- Use `layout.connected_room_ids(...)` and `layout.find_room_for_position(...)` when systems need explicit room connectivity or spawn/position checks.

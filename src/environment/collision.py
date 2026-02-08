@@ -16,6 +16,7 @@ def _interval_subtract(start: float, end: float, cuts: list[tuple[float, float]]
         if cut_max <= cut_min:
             continue
         next_segments: list[tuple[float, float]] = []
+        # Split each surviving segment around the doorway opening.
         for seg_min, seg_max in segments:
             if cut_max <= seg_min or cut_min >= seg_max:
                 next_segments.append((seg_min, seg_max))

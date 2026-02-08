@@ -18,6 +18,7 @@
 - `Bot.spawn_money_drop(...)` emits a `MoneyPickup` through `MoneyPickupSystem` and is allowed only after death.
 - `WaypointPathfinder.find_path(...)` maps world positions to nearest waypoints and returns a connected path using BFS over waypoint links.
 - `find_cover_plan(...)` finds nearest usable cover that can break line-of-fire from player to bot.
+- `tactics` geometry helpers use 2D segment projection to estimate whether cover blocks the player->bot line.
 - `choose_tactical_action(...)` decides between `attack`, `take_cover`, and `flank` based on health, distance, allies, and available cover. Raises `ValueError` if called on a dead bot; callers must filter dead bots before calling.
 - `build_flank_route(...)` returns side-approach points so bots can pressure from multiple angles.
 - `WaveDirector` scales bot count and difficulty per wave and spawns wave bots at provided spawn positions.

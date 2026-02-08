@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from math import sqrt
 from typing import Literal
 
 
@@ -105,6 +106,37 @@ class FacilityLayout:
     def room_ids(self) -> set[str]:
         return set(self.rooms.keys())
 
+    def doorway_graph(self) -> dict[str, set[str]]:
+        graph: dict[str, set[str]] = {room_id: set() for room_id in self.rooms}
+        for doorway in self.doorways:
+            graph.setdefault(doorway.room_a, set()).add(doorway.room_b)
+            graph.setdefault(doorway.room_b, set()).add(doorway.room_a)
+        return graph
+
+    def connected_room_ids(self, start_room_id: str) -> set[str]:
+        """Return every room reachable from a starting room through doorways."""
+        if start_room_id not in self.rooms:
+            raise ValueError(f"Unknown room_id '{start_room_id}'.")
+        graph = self.doorway_graph()
+        visited: set[str] = set()
+        frontier = [start_room_id]
+        while frontier:
+            room_id = frontier.pop()
+            if room_id in visited:
+                continue
+            visited.add(room_id)
+            for neighbor in graph.get(room_id, set()):
+                if neighbor not in visited:
+                    frontier.append(neighbor)
+        return visited
+
+    def find_room_for_position(self, position: Vector3) -> str | None:
+        x, _, z = position
+        for room in self.rooms.values():
+            if room.min_x <= x <= room.max_x and room.min_z <= z <= room.max_z:
+                return room.room_id
+        return None
+
     def bot_spawn_positions(self) -> list[Vector3]:
         return [spawn.position for spawn in self.spawn_points if spawn.team == "bot"]
 
@@ -113,6 +145,45 @@ class FacilityLayout:
             if spawn.team == "player":
                 return spawn.position
         raise ValueError("Facility layout must define one player spawn point.")
+
+    def lighting_direction_length(self) -> float:
+        direction = self.lighting.directional_direction
+        return sqrt(
+            (direction[0] * direction[0])
+            + (direction[1] * direction[1])
+            + (direction[2] * direction[2])
+        )
+
+    def validate(self) -> None:
+        """Validate doorway/spawn/lighting integrity for runtime safety."""
+        room_ids = self.room_ids()
+        for doorway in self.doorways:
+            if doorway.room_a not in room_ids or doorway.room_b not in room_ids:
+                raise ValueError(f"Doorway '{doorway.doorway_id}' links undefined rooms.")
+            if doorway.width <= 0.0:
+                raise ValueError(f"Doorway '{doorway.doorway_id}' width must be positive.")
+
+        player_spawns = [spawn for spawn in self.spawn_points if spawn.team == "player"]
+        if len(player_spawns) != 1:
+            raise ValueError("Facility layout must define exactly one player spawn.")
+        bot_spawns = [spawn for spawn in self.spawn_points if spawn.team == "bot"]
+        if not bot_spawns:
+            raise ValueError("Facility layout must define at least one bot spawn.")
+        for spawn in self.spawn_points:
+            if self.find_room_for_position(spawn.position) is None:
+                raise ValueError(f"Spawn point '{spawn.spawn_id}' is outside all rooms.")
+
+        if self.lighting.ambient_intensity < 0.0 or self.lighting.directional_intensity < 0.0:
+            raise ValueError("Lighting intensities must be non-negative.")
+        if self.lighting_direction_length() <= 0.0:
+            raise ValueError("Directional lighting direction must be non-zero.")
+
+        # Distinct-room requirement for tactical variety.
+        if len(self.rooms) < 3:
+            raise ValueError("Facility layout must define at least three rooms.")
+        for room in self.rooms.values():
+            if room.max_x <= room.min_x or room.max_z <= room.min_z:
+                raise ValueError(f"Room '{room.room_id}' has invalid dimensions.")
 
 
 def create_default_facility_layout() -> FacilityLayout:
@@ -237,7 +308,7 @@ def create_default_facility_layout() -> FacilityLayout:
         directional_direction=(-0.6, -1.0, -0.3),
     )
 
-    return FacilityLayout(
+    layout = FacilityLayout(
         rooms=rooms,
         doorways=doorways,
         cover_objects=cover_objects,
@@ -246,3 +317,5 @@ def create_default_facility_layout() -> FacilityLayout:
         spawn_points=spawn_points,
         lighting=lighting,
     )
+    layout.validate()
+    return layout

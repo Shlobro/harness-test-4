@@ -7,6 +7,7 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - Core runtime loop and timing
 - State machine for high-level game flow
 - Clock pause/resume and time scaling controls
+- Runtime bridge for HUD damage/kill event hooks through the frame loop
 - Input normalization for WASD + mouse look
 - First-person camera and movement/collision simulation
 - Raycasting-based hit-scan traces
@@ -16,13 +17,15 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - Shop wheel UI logic with radial layout, weapon prices, affordability feedback, purchase validation, and inventory equip flow
 - HUD overlay logic for health/ammo/money/crosshair, damage feedback, and kill notifications
 - Multi-room facility model with doorway connectivity, cover placements, lighting profile, and nav waypoints
+- Facility layout validation for doorways, spawn placement, and non-degenerate lighting vectors
 - Collision world generation from environment rooms/doorways/cover for movement and projectile systems
 - Bot runtime model with stateful health/death handling, shot variance, tactical action selection, cover/flank planning, and wave spawning
 - Money drop economy with collectible pickups, collision-based collection, and primitive visual definitions
 
 ## Directory Map
 - `src/`: runtime game systems.
-  - `src/core/`: game loop, game clock, state manager, input, camera, movement, collision primitives, and raycasting.
+- `src/core/`: game loop, game clock, state manager, input, camera, movement, collision primitives, and raycasting.
+- `src/core/`: game loop, game clock, state manager, input, camera, movement, collision primitives, raycasting, and HUD event/runtime bridges.
   - `src/player/`: player runtime state, combat APIs, instant/smooth inventory switching, reload, hit-scan, and respawn.
   - `src/weapons/`: weapon base model, concrete implementations, visual definitions, and switch transition state.
   - `src/projectiles/`: projectile entity construction and world collision physics.
@@ -65,11 +68,12 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - `ai.tactics` evaluates cover and picks `attack`/`take_cover`/`flank`, including side-approach flank routes.
 - `ai.waves.WaveDirector` scales bot count and difficulty as waves progress.
 - `WaypointPathfinder` computes nearest-waypoint BFS paths for baseline bot movement planning.
-- `environment.create_default_facility_layout()` defines a 5-room indoor map with doorways, cover, waypoints, bot/player spawns, and lighting values.
+- `environment.create_default_facility_layout()` defines and validates a 5-room indoor map with doorways, cover, waypoints, bot/player spawns, and lighting values.
 - `environment.build_collision_world(...)` transforms environment geometry into wall+cover collision AABBs.
 - `environment.build_waypoint_pathfinder(...)` builds validated nav graphs from facility waypoint data.
 - `MoneyPickupSystem` manages spawned money drops, pickup collisions, TTL expiration, and player-balance updates.
 - `HudOverlayController` builds a single HUD payload and tracks timed damage/kill feedback effects.
+- `HudEventRuntimeBridge` + `RuntimeSession` hook HUD damage/kill events into `GameLoop` update callbacks and expose frame-ready HUD state.
 
 ## Development Notes
 - Keep gameplay constants in `config/config.py` until a richer configuration layer is needed.

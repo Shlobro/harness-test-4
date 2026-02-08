@@ -8,6 +8,7 @@ from src.core.game_state import GameState, GameStateManager
 from src.core.input_handler import InputFrame, InputHandler, InputSnapshot
 from src.core.movement import PlayerMovementController
 from src.core.raycasting import RaycastHit, RaycastingSystem, RaycastTarget
+from src.core.runtime import HudEventRuntimeBridge, RuntimeSession
 
 __all__ = [
     "AABB",
@@ -24,4 +25,6 @@ __all__ = [
     "RaycastHit",
     "RaycastingSystem",
     "RaycastTarget",
+    "HudEventRuntimeBridge",
+    "RuntimeSession",
 ]

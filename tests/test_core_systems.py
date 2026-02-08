@@ -3,8 +3,10 @@ import pytest
 from src.core.game_clock import GameClock
 from src.core.game_loop import GameLoop
 from src.core.raycasting import RaycastingSystem, RaycastTarget
+from src.core.runtime import RuntimeSession
 from src.core.game_state import GameState, GameStateManager
 from src.core.input_handler import InputHandler, InputSnapshot
+from src.player.player import Player
 
 
 def test_game_clock_tracks_delta_and_elapsed_time():
@@ -111,3 +113,24 @@ def test_game_loop_updates_only_while_playing():
     loop.step(1.4)
     loop.step(1.8)
     assert deltas == pytest.approx([0.3, 0.4])
+
+
+def test_runtime_session_routes_damage_and_kill_events_to_hud_during_playing_frames():
+    manager = GameStateManager()
+    loop = GameLoop(state_manager=manager)
+    player = Player.with_starter_loadout(start_health=100, start_money=0)
+    session = RuntimeSession(player=player, game_loop=loop)
+
+    session.apply_player_damage(25)
+    session.register_bot_kill("Bot Delta")
+    not_playing_state = session.build_hud_state()
+    assert not_playing_state.damage_indicator.is_visible is False
+    assert not_playing_state.kill_count == 0
+
+    manager.transition_to(GameState.PLAYING)
+    loop.step(10.0)
+    playing_state = session.build_hud_state()
+    assert playing_state.health.current_health == 75
+    assert playing_state.damage_indicator.is_visible is True
+    assert playing_state.kill_count == 1
+    assert [note.message for note in playing_state.kill_notifications] == ["Bot Delta eliminated"]

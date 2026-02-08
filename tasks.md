@@ -83,10 +83,10 @@
 - [x] Implement wall collision detection for player and projectiles
 - [x] Add cover objects (crates, walls) throughout the facility
 - [x] Create navigation data for AI pathfinding
-- [ ] Implement room connectivity and doorways
-- [ ] Add environmental lighting setup
-- [ ] Create spawn points for player and bots
-- [ ] Design at least 3-5 distinct rooms with tactical variety
+- [x] Implement room connectivity and doorways
+- [x] Add environmental lighting setup
+- [x] Create spawn points for player and bots
+- [x] Design at least 3-5 distinct rooms with tactical variety
 - [x] Create src/environment folder developer-guide.md
 
 ## HUD System
@@ -99,7 +99,7 @@
 - [x] Create damage indicator visual feedback
 - [x] Add kill notification or counter display
 - [x] Create src/hud folder developer-guide.md
-- [ ] Integrate HudOverlayController event hooks into the runtime update loop (damage + kill events)
+- [x] Integrate HudOverlayController event hooks into the runtime update loop (damage + kill events)
 
 ## Special Effect: "The Glitch"
 
@@ -165,10 +165,10 @@
 - [x] Ensure all code folders have up-to-date developer-guide.md files
 - [x] Create README.md with installation and running instructions
 - [x] Document controls and gameplay in user-facing documentation
-- [ ] Add code comments for complex algorithms
-- [ ] Review and compact any developer-guide.md files over 500 lines
-- [ ] Verify no code files exceed 1000 lines
-- [ ] Verify no folders have more than 10 code files
+- [x] Add code comments for complex algorithms
+- [x] Review and compact any developer-guide.md files over 500 lines
+- [x] Verify no code files exceed 1000 lines
+- [x] Verify no folders have more than 10 code files
 
 ## Deployment & Build
 

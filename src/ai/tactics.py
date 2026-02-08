@@ -44,6 +44,7 @@ def _segment_point_distance_2d(a: Vector3, b: Vector3, p: Vector3) -> float:
     ab_len_sq = (ab_x * ab_x) + (ab_z * ab_z)
     if ab_len_sq <= 1e-9:
         return _distance_2d(a, p)
+    # Project point p onto segment ab and clamp to segment endpoints.
     t = ((ap_x * ab_x) + (ap_z * ab_z)) / ab_len_sq
     t = max(0.0, min(1.0, t))
     closest = (a[0] + (ab_x * t), 0.0, a[2] + (ab_z * t))

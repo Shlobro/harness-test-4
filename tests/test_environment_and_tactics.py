@@ -15,6 +15,19 @@ def test_default_facility_has_five_rooms_and_doorway_connectivity():
     for doorway in layout.doorways:
         assert doorway.room_a in room_ids
         assert doorway.room_b in room_ids
+    assert layout.connected_room_ids("lobby") == room_ids
+
+
+def test_layout_has_spawn_points_inside_rooms_and_valid_lighting_profile():
+    layout = create_default_facility_layout()
+    assert layout.player_spawn_position() in [spawn.position for spawn in layout.spawn_points if spawn.team == "player"]
+    assert len(layout.bot_spawn_positions()) >= 1
+    for spawn in layout.spawn_points:
+        assert layout.find_room_for_position(spawn.position) is not None
+
+    assert layout.lighting.ambient_intensity >= 0.0
+    assert layout.lighting.directional_intensity > 0.0
+    assert layout.lighting_direction_length() > 0.0
 
 
 def test_collision_world_from_layout_respects_doorway_openings_and_cover():

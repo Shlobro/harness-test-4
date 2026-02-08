@@ -4,7 +4,7 @@
 `src/` contains the game runtime modules for loop/state management, player logic, weapons, and projectile simulation.
 
 ## Folder Overview
-- `core/`: frame stepping, game clock (pause + time scale), state machine, input normalization, first-person camera state, movement, collision primitives, and raycasting.
+- `core/`: frame stepping, game clock (pause + time scale), state machine, input normalization, first-person camera state, movement, collision primitives, raycasting, and HUD runtime event bridges.
 - `player/`: player runtime model (health, money, inventory, immediate + smooth weapon switching, reload, hit-scan/projectile shooting, game-over/respawn).
 - `weapons/`: reusable weapon abstractions, concrete weapons (pistol/shotgun/assault rifle/RPG), switch-transition state, and primitive visual definitions.
 - `projectiles/`: projectile entities plus physics stepping and world collision checks.
@@ -12,7 +12,7 @@
 - `hud/`: HUD overlay payload generation for health, ammo, money, crosshair, damage feedback, and kill notifications.
 - `ai/`: bot runtime model, shot-accuracy helpers, tactical decision/cover/flank planners, and wave spawning+difficulty scaling.
 - `economy/`: money pickup entities, glowing primitive visual definitions, pickup lifecycle, and player collection logic.
-- `environment/`: multi-room facility definitions, doorway connectivity, cover placements, collision world generation, and nav graph generation.
+- `environment/`: multi-room facility definitions, doorway connectivity, spawn/light validation helpers, cover placements, collision world generation, and nav graph generation.
 
 ## Integration Flow
 1. The platform layer collects raw input and passes it to `core.input_handler.InputHandler`.
@@ -31,3 +31,4 @@
 14. `ai.waves.WaveDirector` scales wave difficulty and spawns multiple bots from configured spawn positions.
 15. `economy.money.MoneyPickupSystem` resolves pickup collisions and deposits collected money to `player.Player`.
 16. `hud.HudOverlayController` builds render-ready HUD state and manages damage/kill feedback timers.
+17. `core.runtime.RuntimeSession` and `HudEventRuntimeBridge` queue gameplay damage/kill events and flush them to HUD only during active `playing` loop frames.

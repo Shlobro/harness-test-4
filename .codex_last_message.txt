@@ -1,1 +1,1 @@
-No UI/UX issues found in `git diff`. `review/ui_ux.md` remains empty.
+No UI/UX issues found in the `git diff`. `review/ui_ux.md` remains empty.

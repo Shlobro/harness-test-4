@@ -14,6 +14,8 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - Weapon system with pistol, shotgun, assault rifle, RPG, switch transitions, and primitive visual recipes
 - Projectile entities and physics for bullets, pellets, and rockets
 - Shop wheel UI logic with radial layout, weapon prices, affordability feedback, purchase validation, and inventory equip flow
+- Bot runtime model with stateful health/death handling, shot variance, and waypoint pathfinding
+- Money drop economy with collectible pickups, collision-based collection, and primitive visual definitions
 
 ## Directory Map
 - `src/`: runtime game systems.
@@ -22,6 +24,8 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
   - `src/weapons/`: weapon base model, concrete implementations, visual definitions, and switch transition state.
   - `src/projectiles/`: projectile entity construction and world collision physics.
   - `src/ui/`: shop wheel layout + controller logic for open/close, pause synchronization, and purchasing/equipping.
+  - `src/ai/`: bot runtime model, bot aiming variance helper, and waypoint graph pathfinding.
+  - `src/economy/`: money pickup entities, spawn/update/collect systems, and visual style definitions.
 - `assets/`: static assets (models, audio, textures). Currently placeholder-only.
 - `config/`: centralized runtime configuration modules.
 - `tests/`: automated test suite.
@@ -51,6 +55,9 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - `get_weapon_visual(...)` returns geometric primitive recipes for all progression weapons.
 - `ProjectilePhysicsSystem` advances projectile motion and deactivates projectiles that hit walls or leave world bounds.
 - `ShopWheelController` renders shop entry state (owned/equipped/affordable), toggles pause when opened, and enforces money checks for purchases.
+- `Bot` supports health/state transitions, cooldown-aware shooting with accuracy variance, and money-drop spawning hooks.
+- `WaypointPathfinder` computes nearest-waypoint BFS paths for baseline bot movement planning.
+- `MoneyPickupSystem` manages spawned money drops, pickup collisions, TTL expiration, and player-balance updates.
 
 ## Development Notes
 - Keep gameplay constants in `config/config.py` until a richer configuration layer is needed.

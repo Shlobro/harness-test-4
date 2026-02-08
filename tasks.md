@@ -57,25 +57,25 @@
 
 ## Enemy AI System
 
-- [ ] Create Bot class with health, position, and AI state
-- [ ] Implement basic bot pathfinding using navigation mesh or waypoints
+- [x] Create Bot class with health, position, and AI state
+- [x] Implement basic bot pathfinding using navigation mesh or waypoints
 - [ ] Create tactical AI decision-making system (attack, take cover, flank)
 - [ ] Implement cover detection and usage logic
 - [ ] Create flanking behavior to approach player from multiple angles
-- [ ] Implement bot shooting mechanics with accuracy variance
-- [ ] Add bot death handling with money drop spawning
+- [x] Implement bot shooting mechanics with accuracy variance
+- [x] Add bot death handling with money drop spawning
 - [ ] Create wave spawning system for multiple bots
 - [ ] Implement bot difficulty scaling across waves
-- [ ] Create src/ai folder developer-guide.md
+- [x] Create src/ai folder developer-guide.md
 
 ## Money & Economy
 
-- [ ] Create collectible money item that spawns on bot death
-- [ ] Implement money pickup collision detection
-- [ ] Add money collection logic that updates player balance
-- [ ] Create visual representation for money pickups (glowing cubes/spheres)
+- [x] Create collectible money item that spawns on bot death
+- [x] Implement money pickup collision detection
+- [x] Add money collection logic that updates player balance
+- [x] Create visual representation for money pickups (glowing cubes/spheres)
 - [ ] Balance weapon prices according to progression curve
-- [ ] Create src/economy folder developer-guide.md
+- [x] Create src/economy folder developer-guide.md
 
 ## Environment & Level Design
 

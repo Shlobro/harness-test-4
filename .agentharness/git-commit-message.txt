@@ -1,7 +1,7 @@
-Implement Shop Wheel UI with 'B' key toggle and inventory management
+Implement Bot AI foundations and Money Economy system
 
-- Create `src/ui` with radial menu layout, pricing, and purchase/equip logic.
-- Update `InputHandler` to emit `toggle_shop` event on 'B' key press.
-- Integrate shop open/close with game pause and state management.
-- Add `tests/test_shop_ui.py` covering layout, affordability, and interactions.
-- Update developer guides and mark shop tasks as complete in `tasks.md`.
+- Create `src/ai` with `Bot` state, accuracy variance, and waypoint pathfinding.
+- Create `src/economy` for money drops, pickup collisions, and collection.
+- Integrate bot death spawning drops and player balance updates.
+- Add `tests/test_ai_and_economy.py` covering AI behavior and economy flow.
+- Update documentation and mark tasks as complete.

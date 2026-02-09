@@ -18,6 +18,25 @@ pip install -r requirements.txt
 pytest
 ```
 
+## Build Distribution Artifact
+Create a production package zip:
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\build.ps1
+```
+
+The build script writes:
+- `dist/<artifact>.zip`: deployable package.
+- `dist/<artifact>.zip.sha256`: checksum sidecar.
+- `dist/package/build-manifest.txt`: packaged file count, bytes, and exclusion rules.
+
+## Validate Final Build (Target Desktop Platform)
+Run an end-to-end packaging smoke test:
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\smoke-test-build.ps1
+```
+
+This command rebuilds the artifact, extracts it to a temp directory, and validates that all runtime packages import correctly with standard Python on Windows.
+
 ## Project Layout
 - `src/core/`: game loop, state manager, clock/time controls, camera/input, movement/collision, raycasting.
 - `src/player/`: player state, health/economy, inventory, weapon switching, firing logic.

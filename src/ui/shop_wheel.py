@@ -125,10 +125,11 @@ class ShopWheelController:
         *,
         game_state_manager: GameStateManager,
         game_clock: GameClock,
+        player: Player | None = None,
     ) -> bool:
         """Toggle wheel visibility and synchronize pause state."""
         self.is_open = not self.is_open
-        self._sync_pause_state(game_state_manager=game_state_manager, game_clock=game_clock)
+        self._sync_pause_state(game_state_manager=game_state_manager, game_clock=game_clock, player=player)
         return self.is_open
 
     def handle_input_frame(
@@ -137,12 +138,14 @@ class ShopWheelController:
         toggle_shop_requested: bool,
         game_state_manager: GameStateManager,
         game_clock: GameClock,
+        player: Player | None = None,
     ) -> bool:
         """Consume normalized input and return whether wheel is open."""
         if toggle_shop_requested:
             return self.handle_shop_toggle(
                 game_state_manager=game_state_manager,
                 game_clock=game_clock,
+                player=player,
             )
         return self.is_open
 
@@ -151,11 +154,12 @@ class ShopWheelController:
         *,
         game_state_manager: GameStateManager,
         game_clock: GameClock,
+        player: Player | None = None,
     ) -> None:
         if not self.is_open:
             return
         self.is_open = False
-        self._sync_pause_state(game_state_manager=game_state_manager, game_clock=game_clock)
+        self._sync_pause_state(game_state_manager=game_state_manager, game_clock=game_clock, player=player)
 
     def get_entries(self, player: Player) -> list[ShopWheelEntry]:
         """Return render-ready entries with affordability/ownership status."""
@@ -206,9 +210,13 @@ class ShopWheelController:
         *,
         game_state_manager: GameStateManager,
         game_clock: GameClock,
+        player: Player | None = None,
     ) -> None:
         game_clock.set_paused(self.is_open)
         if self.is_open and game_state_manager.current_state == GameState.PLAYING:
             game_state_manager.transition_to(GameState.PAUSED)
         elif (not self.is_open) and game_state_manager.current_state == GameState.PAUSED:
-            game_state_manager.transition_to(GameState.PLAYING)
+            if player is not None and player.is_game_over:
+                game_state_manager.transition_to(GameState.GAME_OVER)
+            else:
+                game_state_manager.transition_to(GameState.PLAYING)

@@ -11,6 +11,7 @@ from src.core.input_handler import InputHandler, InputSnapshot
 from src.glitch.sequence import GlitchSequenceConfig, GlitchSequenceController
 from src.menus.controller import GameFlowController
 from src.player.player import Player
+from src.weapons.rpg import RPG
 
 
 def test_game_clock_tracks_delta_and_elapsed_time():
@@ -266,3 +267,24 @@ def test_game_flow_manages_controls_pause_and_game_over_screens():
 
     assert flow.handle_menu_action("quit_to_menu") is True
     assert manager.current_state == GameState.MENU
+
+
+def test_rpg_fire_triggers_glitch_ending_and_crash_state():
+    manager = GameStateManager()
+    flow = GameFlowController(state_manager=manager)
+    glitch = GlitchSequenceController(config=GlitchSequenceConfig(transition_seconds=0.4))
+    player = Player.with_starter_loadout(start_health=100, start_money=0)
+    player.add_weapon(RPG(), auto_equip=True)
+
+    assert flow.start_game() is True
+    assert manager.current_state == GameState.PLAYING
+
+    assert player.shoot(1.0) is True
+    assert glitch.trigger_from_weapon(player.equipped_weapon, now=1.0) is True
+
+    flow.update(now=1.1, glitch_controller=glitch)
+    assert manager.current_state == GameState.PLAYING
+
+    flow.update(now=1.41, glitch_controller=glitch)
+    assert glitch.is_crash_screen_visible is True
+    assert manager.current_state == GameState.CRASHED

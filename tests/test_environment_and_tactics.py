@@ -1,9 +1,12 @@
 from random import Random
 
+import pytest
+
 from src.ai.bot import Bot
 from src.ai.tactics import TacticalAction, build_flank_route, choose_tactical_action, find_cover_plan
 from src.ai.waves import WaveDirector
 from src.core.collision import AABB
+from src.core.movement import PlayerMovementController
 from src.environment import build_collision_world, build_waypoint_pathfinder, create_default_facility_layout
 
 
@@ -112,3 +115,84 @@ def test_flank_route_and_wave_scaling_behavior():
     assert len(wave4) > len(wave1)
     assert wave4[0].max_health > wave1[0].max_health
     assert wave4[0].weapon.fire_rate > wave1[0].weapon.fire_rate
+
+
+def test_player_collision_and_movement_are_valid_across_all_rooms():
+    layout = create_default_facility_layout()
+    world = build_collision_world(layout)
+    movement = PlayerMovementController(walk_speed=4.0)
+
+    probes = [spawn.position for spawn in layout.spawn_points]
+    covered_rooms = {
+        layout.find_room_for_position((probe[0], 0.0, probe[2]))
+        for probe in probes
+    }
+    assert layout.room_ids() <= covered_rooms
+    directions = [(1.0, 0.0), (-1.0, 0.0), (0.0, 1.0), (0.0, -1.0)]
+
+    for start in probes:
+        start_position = (start[0], 1.8, start[2])
+        for move_x, move_z in directions:
+            next_position = movement.move(
+                player_position=start_position,
+                player_yaw_degrees=0.0,
+                move_x=move_x,
+                move_z=move_z,
+                delta_time=0.1,
+                collision_world=world,
+            )
+            player_box = AABB(
+                min_corner=(next_position[0] - 0.35, next_position[1] - 0.9, next_position[2] - 0.35),
+                max_corner=(next_position[0] + 0.35, next_position[1] + 0.9, next_position[2] + 0.35),
+            )
+            assert world.collides_with_wall(player_box) is False
+            assert layout.find_room_for_position((next_position[0], 0.0, next_position[2])) is not None
+
+
+def test_bot_ai_selects_cover_flank_and_attack_across_scenarios():
+    layout = create_default_facility_layout()
+    player_position = (0.0, 0.0, 0.0)
+
+    low_health_bot = Bot.create_default(bot_id="low-hp", position=(-7.0, 0.0, -1.0))
+    low_health_bot.health = 20
+    assert (
+        choose_tactical_action(
+            bot=low_health_bot,
+            player_position=player_position,
+            cover_objects=layout.cover_objects,
+            ally_count=0,
+        )
+        == TacticalAction.TAKE_COVER
+    )
+
+    flank_bot = Bot.create_default(bot_id="flank", position=(8.0, 0.0, -6.0))
+    assert (
+        choose_tactical_action(
+            bot=flank_bot,
+            player_position=player_position,
+            cover_objects=layout.cover_objects,
+            ally_count=2,
+        )
+        == TacticalAction.FLANK
+    )
+
+    attack_bot = Bot.create_default(bot_id="attack", position=(0.0, 0.0, 5.0))
+    assert (
+        choose_tactical_action(
+            bot=attack_bot,
+            player_position=player_position,
+            cover_objects=layout.cover_objects,
+            ally_count=0,
+        )
+        == TacticalAction.ATTACK
+    )
+
+    dead_bot = Bot.create_default(bot_id="dead", position=(1.0, 0.0, 1.0))
+    dead_bot.apply_damage(10_000)
+    with pytest.raises(ValueError):
+        choose_tactical_action(
+            bot=dead_bot,
+            player_position=player_position,
+            cover_objects=layout.cover_objects,
+            ally_count=0,
+        )

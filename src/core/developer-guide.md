@@ -16,6 +16,10 @@
 
 ## Behavior Notes
 - `GameStateManager` blocks invalid transitions with `ValueError`.
+- Allowed transitions include:
+  - `PAUSED` → `PLAYING` (resume gameplay)
+  - `PAUSED` → `GAME_OVER` (player died while paused/shopping)
+  - `PAUSED` → `MENU` (quit from pause)
 - `GameLoop.step(now)` always advances the clock, but only runs callbacks in `playing`.
 - `GameClock` supports paused time and positive time-scale multipliers for slowed/accelerated simulation.
 - Mouse look is sensitivity-scaled and pitch is inverted (`mouse up` => positive look pitch).

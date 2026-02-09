@@ -25,6 +25,7 @@ class EconomyConfig:
     shotgun_price: int = 250
     assault_rifle_price: int = 800
     rpg_price: int = 2000
+    bot_kill_reward: int = 125
 
 
 GAME_CONFIG = GameConfig()

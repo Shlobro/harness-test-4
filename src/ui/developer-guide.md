@@ -27,8 +27,12 @@
   - transitions game state from `playing` to `paused`
 4. Closing the shop:
   - unpauses `GameClock`
-  - transitions game state from `paused` to `playing`
+  - transitions game state from `paused` to `playing` (if player is alive)
+  - transitions game state from `paused` to `game_over` (if player died while shopping)
 5. `purchase_or_equip(...)` behavior:
   - Owned weapon: equip it.
   - Unowned weapon with enough money: spend price, instantiate weapon, add to inventory, auto-equip.
   - Unowned weapon without enough money: reject with `insufficient_funds`.
+
+## Edge Cases
+- **Death while shopping**: If the player dies while the shop is open, closing the shop will transition directly to `GAME_OVER` instead of resuming gameplay, preventing a "resume gameplay while dead" UX bug.

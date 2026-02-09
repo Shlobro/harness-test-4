@@ -45,6 +45,7 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - `assets/`: static assets (models, audio, textures). Currently placeholder-only.
 - `config/`: centralized runtime configuration modules.
 - `tests/`: automated test suite.
+- `scripts/`: operational tooling for production packaging and packaged-build smoke testing.
 - `requirements.txt`: pinned Python dependencies.
 
 ## Technology Stack Decision
@@ -97,3 +98,6 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 ## Development Notes
 - Keep gameplay constants in `config/config.py` until a richer configuration layer is needed.
 - Add per-folder `developer-guide.md` files when new code folders gain implementation files.
+- Production artifact generation: run `powershell -ExecutionPolicy Bypass -File .\scripts\build.ps1` to produce `dist/fps-bot-arena-<timestamp>.zip` and its `.sha256` checksum.
+- Final build validation on desktop Python: run `powershell -ExecutionPolicy Bypass -File .\scripts\smoke-test-build.ps1`.
+- Build packaging strips non-runtime files for smaller artifacts (`__pycache__`, bytecode files, and folder-level `developer-guide.md` files).

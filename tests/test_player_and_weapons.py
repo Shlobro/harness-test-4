@@ -1,7 +1,11 @@
 import pytest
 
+from config.config import ECONOMY_CONFIG
 from src.player.player import Player
+from src.weapons.assault_rifle import AssaultRifle
 from src.weapons.pistol import Pistol
+from src.weapons.rpg import RPG
+from src.weapons.shotgun import Shotgun
 from src.weapons.weapon import Weapon
 
 
@@ -114,3 +118,47 @@ def test_pistol_defaults_and_player_shooting_behavior():
     player.apply_damage(100)
     assert player.shoot(2.0) is False
 
+
+def test_weapon_progression_damage_profile_scales_by_tier():
+    pistol = Pistol()
+    shotgun = Shotgun()
+    rifle = AssaultRifle()
+    rpg = RPG()
+
+    # Balance sanity: stronger tiers should increase peak damage output.
+    pistol_shot_damage = pistol.damage
+    shotgun_shot_damage = shotgun.damage * shotgun.pellet_count
+    rifle_shot_damage = rifle.damage
+    rpg_shot_damage = rpg.damage
+
+    assert shotgun_shot_damage > pistol_shot_damage
+    assert rifle_shot_damage < shotgun_shot_damage
+    assert rpg_shot_damage > shotgun_shot_damage
+
+    # Pricing should stay aligned with power progression.
+    assert ECONOMY_CONFIG.shotgun_price < ECONOMY_CONFIG.assault_rifle_price < ECONOMY_CONFIG.rpg_price
+
+
+def test_shooting_respects_cooldown_boundaries_for_responsiveness():
+    player = Player.with_starter_loadout(start_health=100, start_money=0)
+    pistol = player.equipped_weapon
+
+    assert player.shoot(1.0) is True
+    assert player.shoot(1.0 + pistol.cooldown_seconds - 1e-5) is False
+    assert player.shoot(1.0 + pistol.cooldown_seconds + 1e-5) is True
+
+
+def test_running_out_of_ammo_blocks_fire_until_reload():
+    player = Player.with_starter_loadout(start_health=100, start_money=0)
+    pistol = player.equipped_weapon
+    pistol.ammo_in_magazine = 1
+    pistol.reserve_ammo = 2
+
+    assert player.shoot(1.0) is True
+    assert pistol.ammo_in_magazine == 0
+    assert player.shoot(2.0) is False
+
+    loaded = player.reload_weapon()
+    assert loaded == 2
+    assert pistol.ammo_in_magazine == 2
+    assert player.shoot(3.0) is True

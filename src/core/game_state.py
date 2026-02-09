@@ -28,7 +28,7 @@ class GameStateManager:
         GameState.MENU: {GameState.PLAYING, GameState.CONTROLS},
         GameState.CONTROLS: {GameState.MENU},
         GameState.PLAYING: {GameState.PAUSED, GameState.CRASHED, GameState.GAME_OVER, GameState.MENU},
-        GameState.PAUSED: {GameState.PLAYING, GameState.MENU},
+        GameState.PAUSED: {GameState.PLAYING, GameState.GAME_OVER, GameState.MENU},
         GameState.GAME_OVER: {GameState.MENU, GameState.PLAYING},
         GameState.CRASHED: {GameState.MENU},
     }

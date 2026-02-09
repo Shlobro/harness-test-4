@@ -149,31 +149,20 @@
 
 ## Testing & Balancing
 
-- [ ] Test player movement and collision in all rooms
-- [ ] Verify weapon damage values are balanced and fun
-- [ ] Test bot AI behavior in various scenarios
-- [ ] Validate money economy progression feels appropriate
-- [ ] Test that player can afford weapons at reasonable pace
-- [ ] Verify shooting mechanics feel responsive
-- [ ] Test edge cases (running out of ammo, dying while shopping)
-- [ ] Verify the crash ending triggers correctly
-- [ ] Test performance with maximum expected bot count
-
-## Documentation & Polish
-
-- [x] Update root developer-guide.md with complete architecture overview
-- [x] Ensure all code folders have up-to-date developer-guide.md files
-- [x] Create README.md with installation and running instructions
-- [x] Document controls and gameplay in user-facing documentation
-- [x] Add code comments for complex algorithms
-- [x] Review and compact any developer-guide.md files over 500 lines
-- [x] Verify no code files exceed 1000 lines
-- [x] Verify no folders have more than 10 code files
+- [x] Test player movement and collision in all rooms
+- [x] Verify weapon damage values are balanced and fun
+- [x] Test bot AI behavior in various scenarios
+- [x] Validate money economy progression feels appropriate
+- [x] Test that player can afford weapons at reasonable pace
+- [x] Verify shooting mechanics feel responsive
+- [x] Test edge cases (running out of ammo, dying while shopping)
+- [x] Verify the crash ending triggers correctly
+- [x] Test performance with maximum expected bot count
 
 ## Deployment & Build
 
-- [ ] Create build script for production deployment
-- [ ] Test final build on target platform (web or desktop)
-- [ ] Optimize assets and code for performance
-- [ ] Create distribution package with all necessary files
-- [ ] Write deployment instructions in README.md
+- [x] Create build script for production deployment
+- [x] Test final build on target platform (web or desktop)
+- [x] Optimize assets and code for performance
+- [x] Create distribution package with all necessary files
+- [x] Write deployment instructions in README.md

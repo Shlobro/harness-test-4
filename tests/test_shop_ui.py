@@ -126,3 +126,23 @@ def test_shop_selection_equips_owned_weapon_from_inventory():
     assert equip_result.success is True
     assert equip_result.action == "equipped"
     assert player.equipped_weapon_name == "Shotgun"
+
+
+def test_shop_toggle_recovers_cleanly_if_player_dies_while_open():
+    player = Player.with_starter_loadout(start_health=100, start_money=0)
+    manager = GameStateManager()
+    manager.transition_to(GameState.PLAYING)
+    clock = GameClock()
+    clock.tick(1.0)
+    controller = ShopWheelController()
+
+    controller.handle_shop_toggle(game_state_manager=manager, game_clock=clock, player=player)
+    assert controller.is_open is True
+    assert manager.current_state == GameState.PAUSED
+
+    player.apply_damage(10_000)
+    assert player.is_game_over is True
+
+    controller.handle_shop_toggle(game_state_manager=manager, game_clock=clock, player=player)
+    assert controller.is_open is False
+    assert manager.current_state == GameState.GAME_OVER

@@ -10,6 +10,7 @@ If a category has no issues, leave that file empty.
 When writing findings, include concrete file references so fixes can be applied directly from the report.
 Keep issue wording focused on user-visible impact (for example, interaction friction, unclear prompts, or abrupt screen/state behavior).
 For diff-based reviews, anchor each issue to the changed lines that introduced the user-visible behavior.
+If a changed test introduces or locks in a user-visible regression expectation, report it as a review issue with the test file/line reference.
 
 ## Files
 `architecture.md`

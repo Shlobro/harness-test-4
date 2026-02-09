@@ -1,11 +1,15 @@
 import pytest
 
+from src.audio.engine import AudioEngine
+from src.audio.sound_manager import SoundManager
 from src.core.game_clock import GameClock
 from src.core.game_loop import GameLoop
 from src.core.raycasting import RaycastingSystem, RaycastTarget
 from src.core.runtime import RuntimeSession
 from src.core.game_state import GameState, GameStateManager
 from src.core.input_handler import InputHandler, InputSnapshot
+from src.glitch.sequence import GlitchSequenceConfig, GlitchSequenceController
+from src.menus.controller import GameFlowController
 from src.player.player import Player
 
 
@@ -134,3 +138,89 @@ def test_runtime_session_routes_damage_and_kill_events_to_hud_during_playing_fra
     assert playing_state.damage_indicator.is_visible is True
     assert playing_state.kill_count == 1
     assert [note.message for note in playing_state.kill_notifications] == ["Bot Delta eliminated"]
+
+
+def test_runtime_session_routes_audio_events_during_playing_frames():
+    manager = GameStateManager()
+    loop = GameLoop(state_manager=manager)
+    player = Player.with_starter_loadout(start_health=100, start_money=0)
+    audio_engine = AudioEngine()
+    sound_manager = SoundManager(engine=audio_engine)
+    session = RuntimeSession(player=player, game_loop=loop, sound_manager=sound_manager)
+
+    session.register_weapon_fire_audio("Pistol")
+    session.register_weapon_fire_audio("RPG")
+    session.register_player_footstep_audio(is_running=True)
+    session.register_bot_fire_audio()
+    session.register_bot_death_audio()
+    session.register_money_pickup_audio()
+    session.start_ambient_audio()
+    assert audio_engine.active_events == []
+
+    session.register_ui_audio("shop_open")
+    ui_sound_names = [evt.sound_name for evt in audio_engine.active_events]
+    assert "ui_shop_open" in ui_sound_names
+
+    manager.transition_to(GameState.PLAYING)
+    loop.step(2.0)
+    active_sound_names = [evt.sound_name for evt in audio_engine.active_events]
+    assert "shot_pistol" in active_sound_names
+    assert "rpg_pre_crash_warning" in active_sound_names
+    assert "shot_rpg" in active_sound_names
+    assert "footstep_run" in active_sound_names
+    assert "bot_shot" in active_sound_names
+    assert "bot_death" in active_sound_names
+    assert "money_pickup" in active_sound_names
+    assert "ui_shop_open" in active_sound_names
+    assert "ambient_facility_hum" in active_sound_names
+
+    session.stop_ambient_audio()
+    loop.step(2.1)
+    assert all(evt.sound_name != "ambient_facility_hum" for evt in audio_engine.active_events)
+
+
+def test_game_flow_main_menu_screen_has_start_action():
+    manager = GameStateManager()
+    flow = GameFlowController(state_manager=manager)
+    glitch = GlitchSequenceController()
+
+    screen = flow.get_active_screen(glitch)
+    assert screen is not None
+    assert screen.screen_id == "main_menu"
+    assert screen.title == "FPS Bot Arena"
+    assert any(action.action_id == "start_game" and action.is_primary for action in screen.actions)
+
+
+def test_game_flow_transitions_to_crashed_and_back_to_menu_after_recovery():
+    manager = GameStateManager()
+    flow = GameFlowController(state_manager=manager)
+    glitch = GlitchSequenceController(
+        config=GlitchSequenceConfig(transition_seconds=0.5, recovery_seconds=0.2)
+    )
+    engine = AudioEngine()
+    sound_manager = SoundManager(engine=engine)
+
+    assert flow.start_game() is True
+    assert manager.current_state == GameState.PLAYING
+
+    glitch.start_transition(now=0.0)
+    flow.update(now=0.1, glitch_controller=glitch, sound_manager=sound_manager)
+    assert manager.current_state == GameState.CRASHED
+    assert any(evt.sound_name == "glitch_transition_ramp" for evt in engine.active_events)
+
+    flow.update(now=0.6, glitch_controller=glitch, sound_manager=sound_manager)
+    crash_screen = flow.get_active_screen(glitch)
+    assert crash_screen is not None
+    assert crash_screen.screen_id == "crash_ending"
+    assert any(action.action_id == "restart_to_menu" for action in crash_screen.actions)
+    assert any(evt.sound_name == "glitch_crash_impact" for evt in engine.active_events)
+
+    restarted = flow.handle_crash_recovery_input(
+        now=0.6,
+        pressed_keys={"Enter"},
+        glitch_controller=glitch,
+    )
+    assert restarted is True
+    flow.update(now=0.81, glitch_controller=glitch, sound_manager=sound_manager)
+    assert manager.current_state == GameState.MENU
+    assert any(evt.sound_name == "glitch_recovery_confirm" for evt in engine.active_events)

@@ -1,7 +1,0 @@
-Integrate HUD runtime events and enhance environment validation
-
-- Implement `HudEventRuntimeBridge` and `RuntimeSession` in `src/core` to queue and flush damage/kill events during the game loop.
-- Add validation, connectivity graphs, and spatial lookups to `FacilityLayout` in `src/environment`.
-- Add algorithmic comments to collision and tactics modules.
-- Update tests to verify HUD event hooking and facility layout integrity.
-- Update documentation and `tasks.md` to reflect completed integration and maintenance tasks.

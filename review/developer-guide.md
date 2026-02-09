@@ -4,6 +4,12 @@
 Stores review output files produced by automated or manual code reviews. Each file is intentionally minimal and may be empty when there are no findings for that category.
 Review files should contain only issue lists (no positive notes).
 
+## Current Workflow
+For each review run, write only actionable issues to the relevant category file.
+If a category has no issues, leave that file empty.
+When writing findings, include concrete file references so fixes can be applied directly from the report.
+Keep issue wording focused on user-visible impact (for example, interaction friction, unclear prompts, or abrupt screen/state behavior).
+
 ## Files
 `architecture.md`
 Holds architecture-related findings only.

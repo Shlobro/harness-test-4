@@ -12,7 +12,7 @@
 - `collision.py`: AABB and `CollisionWorld` primitives for wall/bounds collision checks.
 - `movement.py`: `PlayerMovementController` for yaw-relative movement with collision + slide resolution.
 - `raycasting.py`: `RaycastingSystem` with nearest-hit line traces against spherical targets for hit-scan shooting.
-- `runtime.py`: runtime composition helpers that wire `HudOverlayController` damage/kill events into `GameLoop` frame updates.
+- `runtime.py`: runtime composition helpers that wire HUD events and queued audio events into `GameLoop` frame updates.
 
 ## Behavior Notes
 - `GameStateManager` blocks invalid transitions with `ValueError`.
@@ -26,4 +26,5 @@
 - `CollisionWorld.outside_world_bounds` checks full containment: returns `True` if any part of the box is outside world bounds.
 - `RaycastingSystem.cast_ray(...)` returns the closest valid target hit (or `None`) within max distance.
 - `HudEventRuntimeBridge` queues damage/kill events and flushes them only on active `playing` frames.
-- `RuntimeSession` provides a minimal player+HUD runtime wrapper with `apply_player_damage(...)`, `register_bot_kill(...)`, and `build_hud_state(...)`.
+- `AudioEventRuntimeBridge` queues gameplay audio intents (weapon fire, footsteps, bot fire/death, money pickup, ambient start/stop) and flushes them only on active `playing` frames. UI audio events are played immediately regardless of game state to ensure responsive UI feedback.
+- `RuntimeSession` provides a minimal player runtime wrapper for HUD + optional audio integration, exposing helper APIs for damage/kill HUD hooks and audio event registration.

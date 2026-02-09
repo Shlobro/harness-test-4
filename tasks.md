@@ -103,13 +103,13 @@
 
 ## Special Effect: "The Glitch"
 
-- [ ] Design fake BSOD or critical error screen mockup
-- [ ] Implement screen transition effect when RPG is fired
-- [ ] Create realistic error message content for the fake crash
-- [ ] Add visual effects (screen shake, distortion) before crash screen
-- [ ] Implement audio cues for the crash sequence
-- [ ] Create escape mechanism or restart option after crash screen
-- [ ] Test that the fake crash is convincing but clearly recoverable
+- [x] Design fake BSOD or critical error screen mockup
+- [x] Implement screen transition effect when RPG is fired
+- [x] Create realistic error message content for the fake crash
+- [x] Add visual effects (screen shake, distortion) before crash screen
+- [x] Implement audio cues for the crash sequence
+- [x] Create escape mechanism or restart option after crash screen
+- [x] Test that the fake crash is convincing but clearly recoverable
 - [ ] Create src/glitch folder developer-guide.md
 
 ## Graphics & Rendering
@@ -127,23 +127,23 @@
 
 ## Audio System
 
-- [ ] Set up audio engine and sound manager
-- [ ] Add placeholder or procedural shooting sounds for each weapon
-- [ ] Implement footstep sounds for player movement
-- [ ] Add bot shooting and death sounds
-- [ ] Create money pickup sound effect
-- [ ] Add UI sounds for shop interactions
-- [ ] Implement ambient facility sounds
-- [ ] Add sound for RPG firing before crash
-- [ ] Create src/audio folder developer-guide.md
+- [x] Set up audio engine and sound manager
+- [x] Add placeholder or procedural shooting sounds for each weapon
+- [x] Implement footstep sounds for player movement
+- [x] Add bot shooting and death sounds
+- [x] Create money pickup sound effect
+- [x] Add UI sounds for shop interactions
+- [x] Implement ambient facility sounds
+- [x] Add sound for RPG firing before crash
+- [x] Create src/audio folder developer-guide.md
 
 ## Game Flow & Menus
 
-- [ ] Create main menu screen with start button
+- [x] Create main menu screen with start button
 - [ ] Implement pause menu with resume and quit options
 - [ ] Add game over screen showing survival time or kills
-- [ ] Create victory/crash ending screen after RPG sequence
-- [ ] Implement transitions between game states
+- [x] Create victory/crash ending screen after RPG sequence
+- [x] Implement transitions between game states
 - [ ] Add controls instruction screen
 - [ ] Create src/menus folder developer-guide.md
 
@@ -177,4 +177,3 @@
 - [ ] Optimize assets and code for performance
 - [ ] Create distribution package with all necessary files
 - [ ] Write deployment instructions in README.md
-

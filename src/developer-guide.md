@@ -13,6 +13,9 @@
 - `ai/`: bot runtime model, shot-accuracy helpers, tactical decision/cover/flank planners, and wave spawning+difficulty scaling.
 - `economy/`: money pickup entities, glowing primitive visual definitions, pickup lifecycle, and player collection logic.
 - `environment/`: multi-room facility definitions, doorway connectivity, spawn/light validation helpers, cover placements, collision world generation, and nav graph generation.
+- `glitch/`: fake BSOD content and RPG-triggered crash transition/recovery state machine with pre-crash visual effect values.
+- `audio/`: backend-agnostic audio event engine and gameplay sound mapping with placeholder/procedural profiles for weapons, footsteps, bot events, money pickup, UI events, ambient loops, and RPG pre-crash cue.
+- `menus/`: render-facing menu/ending screen payload builders and game-flow controller for `menu`/`paused`/`playing`/`crashed` transitions.
 
 ## Integration Flow
 1. The platform layer collects raw input and passes it to `core.input_handler.InputHandler`.
@@ -32,3 +35,7 @@
 15. `economy.money.MoneyPickupSystem` resolves pickup collisions and deposits collected money to `player.Player`.
 16. `hud.HudOverlayController` builds render-ready HUD state and manages damage/kill feedback timers.
 17. `core.runtime.RuntimeSession` and `HudEventRuntimeBridge` queue gameplay damage/kill events and flush them to HUD only during active `playing` loop frames.
+18. `glitch.GlitchSequenceController` consumes RPG `crash_triggered` flags, emits transition visual effect values, and controls recoverable crash flow.
+19. `core.runtime.AudioEventRuntimeBridge` queues gameplay audio intents and flushes them only during active `playing` loop frames.
+20. `audio.SoundManager` maps weapon/UI/movement/economy/enemy/ambient gameplay events into `audio.AudioEngine` sound events.
+21. `menus.GameFlowController` advances glitch timing, applies crash-related game-state transitions, exposes main/crash screen payloads, and maps glitch audio cue intents to `SoundManager`.

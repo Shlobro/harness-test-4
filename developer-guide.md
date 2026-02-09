@@ -14,6 +14,7 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - Raycasting-based hit-scan traces
 - Player model with health, money, inventory, immediate/smooth weapon switching, reload, projectile fire, hit-scan fire, and respawn/game-over
 - Weapon system with pistol, shotgun, assault rifle, RPG, switch transitions, and primitive visual recipes
+- Graphics blueprint layer with 3D render-context settings, primitive character/environment models, lighting rig data, and deterministic particle/effect payloads
 - Projectile entities and physics for bullets, pellets, and rockets
 - Glitch/crash sequence system with fake BSOD content, RPG-triggered transition timing, and recoverable restart flow
 - Menu/game-flow layer with main menu payload, crash ending screen payload, and glitch-driven state transitions
@@ -40,6 +41,7 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
   - `src/ai/`: bot runtime model, bot aiming variance helper, tactical decisions, and wave progression systems.
   - `src/environment/`: room/doorway/cover layout definitions plus collision/nav data builders.
   - `src/economy/`: money pickup entities, spawn/update/collect systems, and visual style definitions.
+  - `src/graphics/`: render context setup, primitive model blueprints, lighting presets, and visual effects payload builders.
 - `assets/`: static assets (models, audio, textures). Currently placeholder-only.
 - `config/`: centralized runtime configuration modules.
 - `tests/`: automated test suite.
@@ -86,6 +88,11 @@ The current codebase implements engine-agnostic gameplay foundations in pure Pyt
 - `HudOverlayController` builds a single HUD payload and tracks timed damage/kill feedback effects.
 - `HudEventRuntimeBridge` + `RuntimeSession` hook HUD damage/kill events into `GameLoop` update callbacks and expose frame-ready HUD state.
 - `AudioEventRuntimeBridge` + `RuntimeSession` optionally queue and flush audio events only during active `playing` frames.
+- `graphics.setup_default_rendering_context()` configures and initializes a baseline 3D scene context.
+- `graphics.create_player_model()` / `graphics.create_bot_model()` provide primitive-only character model blueprints.
+- `graphics.create_weapon_visual_models()` and `graphics.create_environment_object_models()` provide primitive model sets for weapons and world props.
+- `graphics.create_basic_lighting_rig()` defines ambient + directional lighting data for the facility.
+- `graphics.MuzzleFlashEffectSystem`, `graphics.ExplosionEffectSystem`, and `graphics.HitFeedbackSystem` generate deterministic VFX payloads and time-decayed hit feedback values.
 
 ## Development Notes
 - Keep gameplay constants in `config/config.py` until a richer configuration layer is needed.

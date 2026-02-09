@@ -54,6 +54,6 @@ def build_fake_bsod_screen() -> FakeCrashScreen:
             "Exception 0x000000EF at kernel frame 0xFFFFA304."
         ),
         completion_text="82% complete",
-        restart_hint="Press ENTER, ESC, or R to safely return to the main menu.",
+        restart_hint="Press ENTER or ESC to safely return to the main menu (R also works).",
         simulation_notice="Simulation notice: this is an in-game effect and is fully recoverable.",
     )

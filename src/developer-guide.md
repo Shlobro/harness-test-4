@@ -15,7 +15,8 @@
 - `environment/`: multi-room facility definitions, doorway connectivity, spawn/light validation helpers, cover placements, collision world generation, and nav graph generation.
 - `glitch/`: fake BSOD content and RPG-triggered crash transition/recovery state machine with pre-crash visual effect values.
 - `audio/`: backend-agnostic audio event engine and gameplay sound mapping with placeholder/procedural profiles for weapons, footsteps, bot events, money pickup, UI events, ambient loops, and RPG pre-crash cue.
-- `menus/`: render-facing menu/ending screen payload builders and game-flow controller for `menu`/`paused`/`playing`/`crashed` transitions.
+- `menus/`: render-facing menu/ending screen payload builders and game-flow controller for `menu`/`paused`/`playing`/`crashed`/`game_over` transitions.
+- `graphics/`: render context settings, primitive model blueprints (player/bot/weapons/environment), lighting rig definitions, and deterministic VFX payload generators (muzzle flash, explosion, hit feedback).
 
 ## Integration Flow
 1. The platform layer collects raw input and passes it to `core.input_handler.InputHandler`.
@@ -39,3 +40,5 @@
 19. `core.runtime.AudioEventRuntimeBridge` queues gameplay audio intents and flushes them only during active `playing` loop frames.
 20. `audio.SoundManager` maps weapon/UI/movement/economy/enemy/ambient gameplay events into `audio.AudioEngine` sound events.
 21. `menus.GameFlowController` advances glitch timing, applies crash-related game-state transitions, exposes main/crash screen payloads, and maps glitch audio cue intents to `SoundManager`.
+22. `graphics.build_default_scene_blueprint()` assembles rendering context, static lighting, and geometric model blueprints for game entities and environment pieces.
+23. `graphics.effects` systems generate deterministic particle/effect payloads for weapon fire, RPG explosions, and damage feedback overlays.

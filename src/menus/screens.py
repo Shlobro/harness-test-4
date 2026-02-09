@@ -46,9 +46,84 @@ def build_main_menu_screen() -> MenuScreen:
                 is_primary=True,
             ),
             ScreenAction(
+                action_id="controls",
+                label="Controls",
+                hint="View detailed controls.",
+            ),
+            ScreenAction(
                 action_id="quit",
                 label="Quit",
                 hint="Exit the session.",
+            ),
+        ],
+    )
+
+
+def build_controls_screen() -> MenuScreen:
+    """Build the controls instruction screen."""
+    return MenuScreen(
+        screen_id="controls",
+        title="Controls",
+        subtitle="Master the arena mechanics.",
+        body_lines=[
+            "Movement: W, A, S, D",
+            "Look: Mouse",
+            "Fire: Left Mouse Button",
+            "Reload: R",
+            "Shop / Inventory: B (Hold)",
+            "Weapon Switch: 1, 2, 3, 4",
+            "Jump: Space",
+        ],
+        actions=[
+            ScreenAction(
+                action_id="back_to_menu",
+                label="Back",
+                hint="Return to main menu.",
+                is_primary=True,
+            ),
+        ],
+    )
+
+
+def build_pause_menu_screen() -> MenuScreen:
+    """Build the pause menu payload."""
+    return MenuScreen(
+        screen_id="pause_menu",
+        title="Paused",
+        subtitle="Game simulation suspended.",
+        actions=[
+            ScreenAction(
+                action_id="resume_game",
+                label="Resume",
+                hint="Return to the fight.",
+                is_primary=True,
+            ),
+            ScreenAction(
+                action_id="quit_to_menu",
+                label="Quit to Menu",
+                hint="Abandon current run.",
+            ),
+        ],
+    )
+
+
+def build_game_over_screen(score: int, waves_cleared: int) -> MenuScreen:
+    """Build the game over screen with stats."""
+    return MenuScreen(
+        screen_id="game_over",
+        title="Mission Failed",
+        subtitle=f"You survived {waves_cleared} waves with a score of {score}.",
+        actions=[
+            ScreenAction(
+                action_id="restart_game",
+                label="Try Again",
+                hint="Start a new run.",
+                is_primary=True,
+            ),
+            ScreenAction(
+                action_id="quit_to_menu",
+                label="Main Menu",
+                hint="Return to title screen.",
             ),
         ],
     )

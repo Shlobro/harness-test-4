@@ -110,20 +110,20 @@
 - [x] Implement audio cues for the crash sequence
 - [x] Create escape mechanism or restart option after crash screen
 - [x] Test that the fake crash is convincing but clearly recoverable
-- [ ] Create src/glitch folder developer-guide.md
+- [x] Create src/glitch folder developer-guide.md
 
 ## Graphics & Rendering
 
-- [ ] Set up 3D rendering context (Three.js scene or Ursina window)
-- [ ] Create geometric primitive models for player character
-- [ ] Create geometric primitive models for bot characters
-- [ ] Implement weapon visual models using simple shapes
-- [ ] Create environment objects using cubes and basic shapes
-- [ ] Implement basic lighting system (ambient + directional)
-- [ ] Add simple particle effects for muzzle flash
-- [ ] Create explosion effects for RPG
-- [ ] Implement visual feedback for hits and damage
-- [ ] Create src/graphics folder developer-guide.md
+- [x] Set up 3D rendering context (Three.js scene or Ursina window)
+- [x] Create geometric primitive models for player character
+- [x] Create geometric primitive models for bot characters
+- [x] Implement weapon visual models using simple shapes
+- [x] Create environment objects using cubes and basic shapes
+- [x] Implement basic lighting system (ambient + directional)
+- [x] Add simple particle effects for muzzle flash
+- [x] Create explosion effects for RPG
+- [x] Implement visual feedback for hits and damage
+- [x] Create src/graphics folder developer-guide.md
 
 ## Audio System
 
@@ -140,12 +140,12 @@
 ## Game Flow & Menus
 
 - [x] Create main menu screen with start button
-- [ ] Implement pause menu with resume and quit options
-- [ ] Add game over screen showing survival time or kills
+- [x] Implement pause menu with resume and quit options
+- [x] Add game over screen showing survival time or kills
 - [x] Create victory/crash ending screen after RPG sequence
 - [x] Implement transitions between game states
-- [ ] Add controls instruction screen
-- [ ] Create src/menus folder developer-guide.md
+- [x] Add controls instruction screen
+- [x] Create src/menus folder developer-guide.md
 
 ## Testing & Balancing
 

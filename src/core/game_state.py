@@ -10,8 +10,10 @@ class GameState(str, Enum):
     """Allowed top-level game states."""
 
     MENU = "menu"
+    CONTROLS = "controls"
     PLAYING = "playing"
     PAUSED = "paused"
+    GAME_OVER = "game_over"
     CRASHED = "crashed"
 
 
@@ -23,9 +25,11 @@ class GameStateManager:
     transition_history: list[GameState] = field(default_factory=lambda: [GameState.MENU])
 
     _ALLOWED_TRANSITIONS = {
-        GameState.MENU: {GameState.PLAYING},
-        GameState.PLAYING: {GameState.PAUSED, GameState.CRASHED, GameState.MENU},
+        GameState.MENU: {GameState.PLAYING, GameState.CONTROLS},
+        GameState.CONTROLS: {GameState.MENU},
+        GameState.PLAYING: {GameState.PAUSED, GameState.CRASHED, GameState.GAME_OVER, GameState.MENU},
         GameState.PAUSED: {GameState.PLAYING, GameState.MENU},
+        GameState.GAME_OVER: {GameState.MENU, GameState.PLAYING},
         GameState.CRASHED: {GameState.MENU},
     }
 

@@ -2,12 +2,19 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from src.audio.sound_manager import SoundManager
 from src.core.game_state import GameState, GameStateManager
-from src.glitch.sequence import GlitchAudioCue, GlitchPhase, GlitchSequenceController
-from src.menus.screens import MenuScreen, build_crash_ending_screen, build_main_menu_screen
+from src.glitch.sequence import GlitchAudioCue, GlitchSequenceController
+from src.menus.screens import (
+    MenuScreen,
+    build_controls_screen,
+    build_crash_ending_screen,
+    build_game_over_screen,
+    build_main_menu_screen,
+    build_pause_menu_screen,
+)
 
 
 @dataclass
@@ -15,14 +22,22 @@ class GameFlowController:
     """Coordinates high-level state transitions and menu screen payloads."""
 
     state_manager: GameStateManager
+    _game_over_stats: tuple[int, int] = field(default=(0, 0))
 
     def start_game(self) -> bool:
-        if self.state_manager.current_state != GameState.MENU:
-            return False
-        self.state_manager.transition_to(GameState.PLAYING)
-        return True
+        """Start a new game session."""
+        if self.state_manager.current_state in (
+            GameState.MENU,
+            GameState.GAME_OVER,
+            GameState.PAUSED,
+        ):
+            if self.state_manager.can_transition_to(GameState.PLAYING):
+                self.state_manager.transition_to(GameState.PLAYING)
+                return True
+        return False
 
     def toggle_pause(self) -> bool:
+        """Toggle between PLAYING and PAUSED states."""
         state = self.state_manager.current_state
         if state == GameState.PLAYING:
             self.state_manager.transition_to(GameState.PAUSED)
@@ -33,12 +48,40 @@ class GameFlowController:
         return False
 
     def open_main_menu(self) -> bool:
+        """Return to the main menu from any compatible state."""
         if self.state_manager.current_state == GameState.MENU:
             return False
-        if not self.state_manager.can_transition_to(GameState.MENU):
-            return False
-        self.state_manager.transition_to(GameState.MENU)
-        return True
+        if self.state_manager.can_transition_to(GameState.MENU):
+            self.state_manager.transition_to(GameState.MENU)
+            return True
+        return False
+
+    def trigger_game_over(self, score: int, waves_cleared: int) -> bool:
+        """Transition to game over state with provided session stats."""
+        if self.state_manager.can_transition_to(GameState.GAME_OVER):
+            self._game_over_stats = (score, waves_cleared)
+            self.state_manager.transition_to(GameState.GAME_OVER)
+            return True
+        return False
+
+    def handle_menu_action(self, action_id: str) -> bool:
+        """Process a generic menu action ID. Returns True if handled."""
+        if action_id == "start_game":
+            return self.start_game()
+        if action_id == "controls":
+            if self.state_manager.can_transition_to(GameState.CONTROLS):
+                self.state_manager.transition_to(GameState.CONTROLS)
+                return True
+        if action_id == "back_to_menu":
+            return self.open_main_menu()
+        if action_id == "resume_game":
+            return self.toggle_pause()
+        if action_id == "quit_to_menu":
+            return self.open_main_menu()
+        if action_id == "restart_game":
+            return self.start_game()
+        # "quit" is typically handled by the platform layer
+        return False
 
     def handle_crash_recovery_input(
         self,
@@ -59,10 +102,7 @@ class GameFlowController:
         glitch_controller.update(now)
         self._flush_glitch_audio(glitch_controller=glitch_controller, sound_manager=sound_manager)
 
-        if glitch_controller.phase in (
-            GlitchPhase.CRASH_SCREEN,
-            GlitchPhase.RECOVERING,
-        ):
+        if glitch_controller.is_crash_screen_visible:
             if self.state_manager.current_state == GameState.PLAYING:
                 self.state_manager.transition_to(GameState.CRASHED)
 
@@ -74,6 +114,13 @@ class GameFlowController:
         state = self.state_manager.current_state
         if state == GameState.MENU:
             return build_main_menu_screen()
+        if state == GameState.CONTROLS:
+            return build_controls_screen()
+        if state == GameState.PAUSED:
+            return build_pause_menu_screen()
+        if state == GameState.GAME_OVER:
+            score, waves = self._game_over_stats
+            return build_game_over_screen(score=score, waves_cleared=waves)
         if state == GameState.CRASHED:
             return build_crash_ending_screen(glitch_controller.crash_screen)
         return None

@@ -22,6 +22,7 @@ This directory contains the automated test suite for the FPS Bot Arena project.
 - `test_environment_and_tactics.py`: validates multi-room facility structure, doorway connectivity traversal, spawn placement inside rooms, lighting validity, doorway-aware collision generation, environment nav graph usage, tactical cover/flank decisions, and wave difficulty scaling/spawning.
 - `test_hud.py`: validates HUD snapshot generation (health/ammo/money/crosshair), damage indicator timing, and kill notification/counter behavior.
 - `test_glitch_and_audio.py`: validates fake BSOD content quality/recoverability (including mockup metadata), RPG-triggered crash transition effects, crash lifecycle audio cue emission ordering, recovery flow back to idle, audio event lifecycle controls, expanded sound-manager event coverage (movement/enemy/economy/UI/ambient/glitch), and RPG pre-crash cue playback ordering.
+- `test_graphics_system.py`: validates rendering-context initialization, primitive player/bot/environment/weapon model blueprints, ambient+directional lighting rig creation, muzzle flash/explosion particle payload generation, hit-feedback decay behavior, and full graphics scene blueprint composition.
 
 ## Running Tests
 To run all tests, execute the following command from the project root:

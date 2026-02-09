@@ -205,10 +205,11 @@ def test_game_flow_transitions_to_crashed_and_back_to_menu_after_recovery():
 
     glitch.start_transition(now=0.0)
     flow.update(now=0.1, glitch_controller=glitch, sound_manager=sound_manager)
-    assert manager.current_state == GameState.CRASHED
+    assert manager.current_state == GameState.PLAYING  # Still playing during transition
     assert any(evt.sound_name == "glitch_transition_ramp" for evt in engine.active_events)
 
     flow.update(now=0.6, glitch_controller=glitch, sound_manager=sound_manager)
+    assert manager.current_state == GameState.CRASHED  # Now crashed after transition completes
     crash_screen = flow.get_active_screen(glitch)
     assert crash_screen is not None
     assert crash_screen.screen_id == "crash_ending"
@@ -224,3 +225,44 @@ def test_game_flow_transitions_to_crashed_and_back_to_menu_after_recovery():
     flow.update(now=0.81, glitch_controller=glitch, sound_manager=sound_manager)
     assert manager.current_state == GameState.MENU
     assert any(evt.sound_name == "glitch_recovery_confirm" for evt in engine.active_events)
+
+
+def test_game_flow_manages_controls_pause_and_game_over_screens():
+    manager = GameStateManager()
+    flow = GameFlowController(state_manager=manager)
+    glitch = GlitchSequenceController()
+
+    # Menu -> Controls -> Menu
+    assert manager.current_state == GameState.MENU
+    assert flow.handle_menu_action("controls") is True
+    assert manager.current_state == GameState.CONTROLS
+    controls_screen = flow.get_active_screen(glitch)
+    assert controls_screen.screen_id == "controls"
+
+    assert flow.handle_menu_action("back_to_menu") is True
+    assert manager.current_state == GameState.MENU
+
+    # Menu -> Playing -> Paused -> Playing
+    assert flow.handle_menu_action("start_game") is True
+    assert manager.current_state == GameState.PLAYING
+
+    # Simulate hitting pause (toggle)
+    assert flow.toggle_pause() is True
+    assert manager.current_state == GameState.PAUSED
+    pause_screen = flow.get_active_screen(glitch)
+    assert pause_screen.screen_id == "pause_menu"
+
+    # Simulate clicking "Resume"
+    assert flow.handle_menu_action("resume_game") is True
+    assert manager.current_state == GameState.PLAYING
+
+    # Playing -> Game Over -> Menu
+    assert flow.trigger_game_over(score=500, waves_cleared=3) is True
+    assert manager.current_state == GameState.GAME_OVER
+    game_over_screen = flow.get_active_screen(glitch)
+    assert game_over_screen.screen_id == "game_over"
+    assert "survived 3 waves" in game_over_screen.subtitle
+    assert "score of 500" in game_over_screen.subtitle
+
+    assert flow.handle_menu_action("quit_to_menu") is True
+    assert manager.current_state == GameState.MENU
